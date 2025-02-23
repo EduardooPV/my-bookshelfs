@@ -2,11 +2,11 @@ name: Unit Test Backend
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
     branches:
       - staging
     paths:
-      - '.backend/**'
+      - ".backend/**"
 
 jobs:
   build:
