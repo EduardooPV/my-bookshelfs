@@ -9,7 +9,7 @@
     "test:unit": "jest",
     "lint": "eslint . --ext 'src/**/*.{ts,tsx,js}'",
     "lint:fix": "eslint . --ext 'src/**/*.{ts,tsx,js}' --fix",
-    "prettier": "prettier --write 'src/**/*.{ts,tsx,js}'"
+    "format": "prettier --write 'src/**/*.{ts,tsx,js}'"
   },
   "keywords": [],
   "author": "",
