@@ -1,10 +1,9 @@
 name: CI Backend
 
 on:
-  push:
-    paths:
-      - '.backend/**'
   pull_request:
+    branches:
+      - staging
     paths:
       - '.backend/**'
 
