@@ -6,6 +6,8 @@ O backend do My Bookshelfs é uma API RESTful desenvolvida em Express.js, respon
 ## Modelagem do Banco de Dados
 A estrutura do banco de dados segue a seguinte modelagem:
 
+![image](https://github.com/user-attachments/assets/c3e51321-5fe8-4259-abbb-d13106b42211)
+
 ```dbml
 Table users {
   id integer [pk, increment]
