@@ -1,0 +1,27 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Compiled output (caso use build/dist)
+dist/
+build/
+
+# Jest Coverage
+coverage/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Ambiente/Variáveis de ambiente
+.env
+.env.*  # se houver arquivos de ambiente para diferentes ambientes (ex: .env.development, .env.production)
+
+# Sistema operacional
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# Outras configurações/arquivos temporários
+.eslintcache
