@@ -5,6 +5,8 @@ on:
     types: [opened, reopened, synchronize]
     branches:
       - staging
+    paths:
+      - "backend/**"
 
 jobs:
   build:
@@ -20,8 +22,8 @@ jobs:
 
       - name: Instalar dependências
         run: npm install
-        working-directory: .backend
+        working-directory: backend
 
       - name: Executar testes
         run: npm test:unit
-        working-directory: .backend
+        working-directory: backend
