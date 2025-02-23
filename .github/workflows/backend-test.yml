@@ -15,15 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "14"
+          node-version: 20
 
-      - name: Instalar dependências
+      - name: Install dependencies
         run: npm install
         working-directory: backend
 
-      - name: Executar testes
-        run: npm test:unit
+      - name: Run Tests
+        run: npm run test:unit
         working-directory: backend
