@@ -1,3 +1,5 @@
+![Ícone 128x128](./assets/icon-128x128.png)
+
 # My Bookshelfs
 
 My Bookshelfs é um projeto desenvolvido com Vue3 no frontend e Express no backend.
