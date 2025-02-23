@@ -1,4 +1,4 @@
-name: Unit Test Backend
+name: Backend - Unit Test
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
       - "backend/**"
 
 jobs:
-  build:
+  backend-unit-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

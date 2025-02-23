@@ -1,4 +1,4 @@
-name: Lint and Format Check Backend
+name: Backend - Lint and Format
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
       - "backend/**"
 
 jobs:
-  lint-and-format:
+  backend-lint-and-format:
     runs-on: ubuntu-latest
 
     steps:
