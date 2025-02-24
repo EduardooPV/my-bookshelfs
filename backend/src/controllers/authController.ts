@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { signUp, signIn } from '../services/authService';
+import { signUp, signIn, signOut } from '../services/authService';
 
 export const signUpController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -20,6 +20,16 @@ export const signInController = async (req: Request, res: Response) => {
     const session = await signIn(email, password);
 
     res.status(200).json({ session });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
+export const signOutController = async (req: Request, res: Response) => {
+  try {
+    const out = await signOut();
+
+    res.status(200).json({ out });
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }

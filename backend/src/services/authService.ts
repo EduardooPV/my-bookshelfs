@@ -28,3 +28,13 @@ export const signIn = async (email: string, password: string) => {
 
   return data.session;
 };
+
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return 'Usuário deslogado';
+};
