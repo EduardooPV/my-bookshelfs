@@ -6,7 +6,7 @@
     "start": "node dist/index.js",
     "dev": "nodemon",
     "build": "tsc",
-    "test:unit": "jest",
+    "test:unit": "jest --watch",
     "lint": "eslint . --ext 'src/**/*.{ts,tsx,js}'",
     "lint:fix": "eslint . --ext 'src/**/*.{ts,tsx,js}' --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,js}'"
