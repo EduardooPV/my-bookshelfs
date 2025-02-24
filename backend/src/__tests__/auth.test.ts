@@ -1,8 +1,13 @@
 import request from 'supertest';
-import app from '../index';
+import { app, server } from '../index';
 import * as authService from '../services/authService';
 
 jest.mock('../services/authService');
+
+afterAll(async () => {
+  jest.clearAllMocks();
+  server.close();
+});
 
 describe('Auth Routes', () => {
   const mockUser = { id: 'password123', email: 'test@example.com' };

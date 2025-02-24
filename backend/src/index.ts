@@ -7,8 +7,8 @@ app.use(express.json());
 
 app.use('/auth', authRouter);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
 
-export default app;
+export { app, server };
