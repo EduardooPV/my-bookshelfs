@@ -38,3 +38,27 @@ export const signOut = async () => {
 
   return 'Usuário deslogado';
 };
+
+export const forgotPassword = async (email: string) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'http://localhost:3000/reset-password',
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return 'E-mail de redefinição de senha enviado com sucesso!';
+};
+
+export const resetPassword = async (password: string) => {
+  const { error } = await supabase.auth.updateUser({
+    password,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return 'Senha redefinida com sucesso!';
+};
