@@ -2,15 +2,18 @@ name: Deploy to Vercel (Staging)
 
 on:
   pull_request:
+    types: [opened, edited, reopened, ready_for_review, labeled, synchronize]
     branches:
       - staging
+    paths:
+      - "backend/**"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Check out code
         uses: actions/checkout@v4
 
       - name: Set up Node.js
