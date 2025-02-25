@@ -2,7 +2,7 @@ name: Backend - Deploy to Vercel (Production)
 
 on:
   pull_request:
-    types: [opened, edited, reopened, ready_for_review, labeled, synchronize]
+    types: [opened, reopened, synchronize]
     branches:
       - main
     paths:
