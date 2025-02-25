@@ -1,0 +1,63 @@
+name: Backend - Deploy to Vercel (Staging)
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, ready_for_review, labeled, synchronize]
+    branches:
+      - staging
+    paths:
+      - "backend/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: backend
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+        working-directory: backend
+
+      - name: Pull Vercel Project Settings
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --token $VERCEL_TOKEN
+        working-directory: backend
+
+      - name: Build Project
+        run: npm run build
+        working-directory: backend
+
+      - name: Deploy to Vercel (Preview)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          vercel build
+          DEPLOY_URL=$(vercel --prebuilt --token $VERCEL_TOKEN)
+          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+        working-directory: backend
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        env:
+          DEPLOY_URL: ${{ env.DEPLOY_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COMMENT="🚀 Deploy staging disponível em: $DEPLOY_URL"
+          curl -s -H "Authorization: token $GITHUB_TOKEN" \
+               -X POST \
+               -d "{\"body\": \"$COMMENT\"}" \
+               https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
