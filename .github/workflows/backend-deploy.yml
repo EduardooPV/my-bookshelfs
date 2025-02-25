@@ -1,6 +1,11 @@
-name: Backend - Deploy to Vercel (Staging)
+name: Backend - Deploy to Vercel
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
   pull_request:
     types: [opened, reopened, synchronize]
     branches:
@@ -13,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -39,7 +44,20 @@ jobs:
         run: npm run build
         working-directory: backend
 
-      - name: Deploy to Vercel (Preview)
+      - name: Deploy to Vercel (Production)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          vercel build
+          DEPLOY_URL=$(vercel --prod --token $VERCEL_TOKEN)
+          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+        working-directory: backend
+
+      - name: Deploy to Vercel (Staging)
+        if: github.event_name == 'pull_request' && github.base_ref == 'staging'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -50,8 +68,24 @@ jobs:
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
         working-directory: backend
 
-      - name: Comment on PR
-        if: github.event_name == 'pull_request'
+      - name: Create GitHub Commit Status (Production)
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_URL: ${{ env.DEPLOY_URL }}
+        run: |
+          curl -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -d '{
+              "state": "success",
+              "target_url": "'$DEPLOY_URL'",
+              "description": "Deploy to production is live",
+              "context": "Vercel Deploy"
+            }' \
+            https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
+
+      - name: Comment on PR (Staging)
+        if: success() && github.event_name == 'pull_request' && github.base_ref == 'staging'
         env:
           DEPLOY_URL: ${{ env.DEPLOY_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
