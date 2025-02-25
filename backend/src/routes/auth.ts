@@ -9,6 +9,9 @@ import {
 
 const router = Router();
 
+router.get('/', (req, res) => {
+  res.json({ message: 'Hello from Vercel!' });
+});
 router.post('/signup', signUpController);
 router.post('/signin', signInController);
 router.post('/signout', signOutController);
