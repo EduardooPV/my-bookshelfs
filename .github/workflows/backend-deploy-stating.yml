@@ -23,17 +23,21 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+        working-directory: backend
 
       - name: Install Vercel CLI
         run: npm install -g vercel
+        working-directory: backend
 
       - name: Pull Vercel Project Settings
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: vercel pull --yes --token $VERCEL_TOKEN
+        working-directory: backend
 
       - name: Build Project
         run: npm run build
+        working-directory: backend
 
       - name: Deploy to Vercel (Preview)
         env:
@@ -44,6 +48,7 @@ jobs:
           vercel build
           DEPLOY_URL=$(vercel --prebuilt --token $VERCEL_TOKEN)
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+        working-directory: backend
 
       - name: Comment on PR
         if: github.event_name == 'pull_request'
