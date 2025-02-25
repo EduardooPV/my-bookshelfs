@@ -1,8 +1,7 @@
 name: Backend - Deploy to Vercel (Production)
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
+  push:
     branches:
       - main
     paths:
@@ -50,14 +49,18 @@ jobs:
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
         working-directory: backend
 
-      - name: Comment on PR
-        if: github.event_name == 'pull_request'
+      - name: Create GitHub Commit Status
+        if: success()
         env:
-          DEPLOY_URL: ${{ env.DEPLOY_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_URL: ${{ env.DEPLOY_URL }}
         run: |
-          COMMENT="🚀 Deploy produção disponível em: $DEPLOY_URL"
-          curl -s -H "Authorization: token $GITHUB_TOKEN" \
-               -X POST \
-               -d "{\"body\": \"$COMMENT\"}" \
-               https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
+          curl -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -d '{
+              "state": "success",
+              "target_url": "'$DEPLOY_URL'",
+              "description": "Deploy to production is live",
+              "context": "Vercel Deploy"
+            }' \
+            https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
