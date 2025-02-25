@@ -65,15 +65,3 @@ jobs:
               "context": "Vercel Deploy"
             }' \
             https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}
-
-      - name: Comment on PR
-        if: github.event_name == 'pull_request'
-        env:
-          DEPLOY_URL: ${{ env.DEPLOY_URL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          COMMENT="🚀 Deploy de produção disponível em: $DEPLOY_URL"
-          curl -s -H "Authorization: token $GITHUB_TOKEN" \
-               -X POST \
-               -d "{\"body\": \"$COMMENT\"}" \
-               https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
