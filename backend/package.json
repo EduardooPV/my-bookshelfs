@@ -18,11 +18,17 @@
   "description": "",
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "hpp": "^0.2.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/hpp": "^0.2.6",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.5",
     "@types/supertest": "^6.0.2",
