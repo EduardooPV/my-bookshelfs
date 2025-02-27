@@ -1,11 +1,11 @@
 import express from 'express';
 import authRouter from './routes/auth';
+import booksRouter from './routes/books';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
-
-const app = express();
+import { app } from './app';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
@@ -28,5 +28,6 @@ app.use(helmet());
 app.use(hpp());
 
 app.use('/auth', authRouter);
+app.use('/books', booksRouter);
 
 export default app;
