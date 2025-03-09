@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../index';
-import * as authService from '../services/authService';
+import * as authService from '../services/auth/service';
 import server from '../app';
 
 jest.mock('../services/authService');

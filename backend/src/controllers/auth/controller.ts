@@ -5,7 +5,7 @@ import {
   signOut,
   forgotPassword,
   resetPassword,
-} from '../services/authService';
+} from '../../services/auth';
 
 export const signUpController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
