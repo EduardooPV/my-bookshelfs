@@ -1,9 +1,9 @@
 import request from 'supertest';
 import app from '../index';
-import * as authService from '../services/authService';
+import * as authService from '../services/auth';
 import server from '../app';
 
-jest.mock('../services/authService');
+jest.mock('../services/auth');
 
 afterAll(async () => {
   jest.clearAllMocks();
