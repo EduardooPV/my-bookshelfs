@@ -5,7 +5,6 @@ import {
   mockFormattedBookResponse,
 } from './__mocks__/books';
 
-// Mock do fetch global
 global.fetch = jest.fn();
 
 describe('Books Service', () => {

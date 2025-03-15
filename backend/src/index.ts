@@ -7,7 +7,7 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import { app } from './app';
-import { authMiddleware } from './middleware/auth';
+import { authMiddleware } from './middleware/auth-middleware';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
