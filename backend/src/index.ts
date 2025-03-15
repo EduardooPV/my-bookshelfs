@@ -1,11 +1,13 @@
 import express from 'express';
 import authRouter from './routes/auth';
 import booksRouter from './routes/books';
+import wishlistRouter from './routes/wishlist';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import { app } from './app';
+import { authMiddleware } from './middleware/auth-middleware';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
@@ -28,6 +30,7 @@ app.use(helmet());
 app.use(hpp());
 
 app.use('/auth', authRouter);
-app.use('/books', booksRouter);
+app.use('/books', authMiddleware, booksRouter);
+app.use('/wishlist', authMiddleware, wishlistRouter);
 
 export default app;
