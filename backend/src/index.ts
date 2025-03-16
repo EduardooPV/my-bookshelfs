@@ -82,14 +82,15 @@ app.use('/wishlist', authMiddleware, wishlistRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(
-    '/api-docs',
-    express.static(path.join(__dirname, '../node_modules/swagger-ui-dist')),
-  );
-}
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(
+//     '/api-docs',
+//     // express.static(path.join(__dirname, '../node_modules/swagger-ui-dist')),
+//   );
+// }
 
 app.get('/swagger.json', (req, res) => {
   res.json(swaggerDocs);
 });
+
 export default app;
