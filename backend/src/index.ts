@@ -11,6 +11,7 @@ import { authMiddleware } from './middleware/auth-middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import path from 'path';
+import serveStatic from 'serve-static';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
@@ -82,15 +83,14 @@ app.use('/wishlist', authMiddleware, wishlistRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(
-//     '/api-docs',
-//     // express.static(path.join(__dirname, '../node_modules/swagger-ui-dist')),
-//   );
-// }
+if (process.env.NODE_ENV === 'production') {
+  app.use(
+    '/api-docs',
+    serveStatic(path.join(__dirname, '../node_modules/swagger-ui-dist')),
+  );
+}
 
 app.get('/swagger.json', (req, res) => {
   res.json(swaggerDocs);
 });
-
 export default app;
