@@ -8,8 +8,6 @@ import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import { app } from './app';
 import { authMiddleware } from './middleware/auth-middleware';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsDoc from 'swagger-jsdoc';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
@@ -40,47 +38,5 @@ app.use(hpp());
 app.use('/auth', authRouter);
 app.use('/books', authMiddleware, booksRouter);
 app.use('/wishlist', authMiddleware, wishlistRouter);
-
-if (process.env.NODE_ENV === 'development') {
-  const swaggerOptions = {
-    definition: {
-      openapi: '3.0.0',
-      info: {
-        title: 'My Bookshelfs API',
-        version: '1.0.0',
-        description: 'API para gerenciamento de livros e lista de desejos',
-      },
-      servers: [
-        {
-          url: 'http://localhost:3001',
-          description: 'Servidor local (desenvolvimento)',
-        },
-        {
-          url: 'https://my-bookshelfs-backend.vercel.app',
-          description: 'Servidor de produção (Vercel)',
-        },
-      ],
-      components: {
-        securitySchemes: {
-          BearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT',
-          },
-        },
-      },
-      security: [
-        {
-          BearerAuth: [],
-        },
-      ],
-    },
-    apis: ['./src/routes/*.ts', './dist/routes/*.js'],
-  };
-
-  const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-}
 
 export default app;
