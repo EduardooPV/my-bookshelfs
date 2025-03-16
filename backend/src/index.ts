@@ -31,47 +31,6 @@ const helmetOptions = helmet({
   contentSecurityPolicy: false,
 });
 
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'My Bookshelfs API',
-      version: '1.0.0',
-      description: 'API para gerenciamento de livros e lista de desejos',
-    },
-    servers: [
-      {
-        url: 'http://localhost:3001',
-        description: 'Servidor local (desenvolvimento)',
-      },
-      {
-        url: 'https://my-bookshelfs-backend.vercel.app',
-        description: 'Servidor de produção (Vercel)',
-      },
-    ],
-    components: {
-      securitySchemes: {
-        BearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
-      },
-    },
-    security: [
-      {
-        BearerAuth: [],
-      },
-    ],
-  },
-  apis: ['./src/routes/*.ts', './dist/routes/*.js'],
-};
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-const CSS_URL =
-  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css';
-
-
 app.use(jsonOptions);
 app.use(corsOptions);
 app.use(rateLimitOptions);
@@ -82,17 +41,46 @@ app.use('/auth', authRouter);
 app.use('/books', authMiddleware, booksRouter);
 app.use('/wishlist', authMiddleware, wishlistRouter);
 
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocs, {
-    customCss:
-      '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
-    customCssUrl: CSS_URL,
-  }),
-);
+if (process.env.NODE_ENV === 'development') {
+  const swaggerOptions = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'My Bookshelfs API',
+        version: '1.0.0',
+        description: 'API para gerenciamento de livros e lista de desejos',
+      },
+      servers: [
+        {
+          url: 'http://localhost:3001',
+          description: 'Servidor local (desenvolvimento)',
+        },
+        {
+          url: 'https://my-bookshelfs-backend.vercel.app',
+          description: 'Servidor de produção (Vercel)',
+        },
+      ],
+      components: {
+        securitySchemes: {
+          BearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+        },
+      },
+      security: [
+        {
+          BearerAuth: [],
+        },
+      ],
+    },
+    apis: ['./src/routes/*.ts', './dist/routes/*.js'],
+  };
 
-app.get('/swagger.json', (req, res) => {
-  res.json(swaggerDocs);
-});
+  const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+}
+
 export default app;
