@@ -10,8 +10,6 @@ import { app } from './app';
 import { authMiddleware } from './middleware/auth-middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
-import path from 'path';
-import serveStatic from 'serve-static';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
@@ -70,6 +68,9 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
+const CSS_URL =
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css';
+
 
 app.use(jsonOptions);
 app.use(corsOptions);
@@ -81,14 +82,15 @@ app.use('/auth', authRouter);
 app.use('/books', authMiddleware, booksRouter);
 app.use('/wishlist', authMiddleware, wishlistRouter);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-if (process.env.NODE_ENV === 'production') {
-  app.use(
-    '/api-docs',
-    serveStatic(path.join(__dirname, '../node_modules/swagger-ui-dist')),
-  );
-}
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocs, {
+    customCss:
+      '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
+    customCssUrl: CSS_URL,
+  }),
+);
 
 app.get('/swagger.json', (req, res) => {
   res.json(swaggerDocs);
