@@ -19,6 +19,8 @@ router.get('/:id', getBookControler);
  *   get:
  *     summary: Recuperar todos os livros com base em uma consulta de pesquisa
  *     tags: [Books]
+ *     security:
+ *       - BearerAuth: []  # Requer o Bearer token para essa rota
  *     parameters:
  *       - name: searchQuery
  *         in: query
@@ -100,6 +102,8 @@ router.get('/:id', getBookControler);
  *   get:
  *     summary: Recuperar detalhes de um livro específico pelo seu ID
  *     tags: [Books]
+ *     security:
+ *       - BearerAuth: []  # Requer o Bearer token para essa rota
  *     parameters:
  *       - name: id
  *         in: path
