@@ -47,7 +47,26 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'https://my-bookshelfs-backend.vercel.app/',
+        url: 'http://localhost:3001',
+        description: 'Servidor local (desenvolvimento)',
+      },
+      {
+        url: 'https://my-bookshelfs-backend.vercel.app',
+        description: 'Servidor de produção (Vercel)',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        BearerAuth: [],
       },
     ],
   },
@@ -55,13 +74,15 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocs, {
-    customCssUrl:
-      'https://cdn.jsdelivr.net/npm/swagger-ui-themes@3.0.0/themes/3.x/theme-newspaper.css',
-  }),
-);
+
+app.use('/api-docs', swaggerUi.serve);
+
+app.get('/api-docs', (req, res) => {
+  res.send(swaggerUi.generateHTML(swaggerDocs));
+});
+
+app.get('/swagger.json', (req, res) => {
+  res.json(swaggerDocs);
+});
 
 export default app;

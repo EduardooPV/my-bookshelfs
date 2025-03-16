@@ -26,6 +26,8 @@ router.patch('/:bookId', updateWishlistController);
  *   get:
  *     summary: Recuperar todos os livros da lista de desejos de um usuário
  *     tags: [Wishlist]
+ *     security:
+ *       - BearerAuth: []  # Requer o Bearer token para essa rota
  *     parameters:
  *       - name: userId
  *         in: query
@@ -65,6 +67,8 @@ router.patch('/:bookId', updateWishlistController);
  *   put:
  *     summary: Adicionar um livro à lista de desejos de um usuário
  *     tags: [Wishlist]
+ *     security:
+ *       - BearerAuth: []  # Requer o Bearer token para essa rota
  *     parameters:
  *       - name: bookId
  *         in: path
@@ -113,6 +117,8 @@ router.patch('/:bookId', updateWishlistController);
  *   delete:
  *     summary: Remover um livro da lista de desejos de um usuário
  *     tags: [Wishlist]
+ *     security:
+ *       - BearerAuth: []  # Requer o Bearer token para essa rota
  *     parameters:
  *       - name: bookId
  *         in: path
@@ -143,6 +149,8 @@ router.patch('/:bookId', updateWishlistController);
  *   patch:
  *     summary: Atualizar a prioridade de um livro na lista de desejos de um usuário
  *     tags: [Wishlist]
+ *     security:
+ *       - BearerAuth: []  # Requer o Bearer token para essa rota
  *     parameters:
  *       - name: bookId
  *         in: path
