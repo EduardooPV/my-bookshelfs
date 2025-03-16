@@ -20,22 +20,16 @@ const corsOptions = cors({
   optionsSuccessStatus: 200,
 });
 
-const limiter = rateLimit({
+const rateLimitOptions = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   message:
     'Muitas requisições vindas deste IP, por favor, tente novamente mais tarde.',
 });
 
-app.use(jsonOptions);
-app.use(corsOptions);
-app.use(limiter);
-app.use(helmet());
-app.use(hpp());
-
-app.use('/auth', authRouter);
-app.use('/books', authMiddleware, booksRouter);
-app.use('/wishlist', authMiddleware, wishlistRouter);
+const helmetOptions = helmet({
+  contentSecurityPolicy: false,
+});
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -75,14 +69,18 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-app.use('/api-docs', swaggerUi.serve);
+app.use(jsonOptions);
+app.use(corsOptions);
+app.use(rateLimitOptions);
+app.use(helmetOptions);
+app.use(hpp());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.get('/api-docs', (req, res) => {
-  res.send(swaggerUi.generateHTML(swaggerDocs));
-});
+app.use('/auth', authRouter);
+app.use('/books', authMiddleware, booksRouter);
+app.use('/wishlist', authMiddleware, wishlistRouter);
 
 app.get('/swagger.json', (req, res) => {
   res.json(swaggerDocs);
 });
-
 export default app;
