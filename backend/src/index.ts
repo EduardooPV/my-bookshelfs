@@ -10,8 +10,8 @@ import { app } from './app';
 import { authMiddleware } from './middleware/auth-middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
-// import path from 'path';
-// import serveStatic from 'serve-static';
+import path from 'path';
+import serveStatic from 'serve-static';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
@@ -69,23 +69,26 @@ const swaggerOptions = {
   apis: ['./src/routes/*.ts', './dist/routes/*.js'],
 };
 
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
 app.use(jsonOptions);
 app.use(corsOptions);
 app.use(rateLimitOptions);
 app.use(helmetOptions);
 app.use(hpp());
-// app.use(
-//   '/api-docs',
-//   serveStatic(path.join(__dirname, '../node_modules/swagger-ui-dist')),
-// );
 
 app.use('/auth', authRouter);
 app.use('/books', authMiddleware, booksRouter);
 app.use('/wishlist', authMiddleware, wishlistRouter);
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+if (process.env.NODE_ENV === 'production') {
+  app.use(
+    '/api-docs',
+    serveStatic(path.join(__dirname, '../node_modules/swagger-ui-dist')),
+  );
+} else {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+}
 
 app.get('/swagger.json', (req, res) => {
   res.json(swaggerDocs);
