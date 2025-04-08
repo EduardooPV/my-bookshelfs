@@ -1,4 +1,4 @@
-import { getAllBooks, getBook } from '../services/books';
+import { getAllBooks, getBook } from '../services/book';
 import {
   mockSearchResponse,
   mockBookDetails,
