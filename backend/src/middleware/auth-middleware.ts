@@ -1,8 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createClient } from '@supabase/supabase-js';
-import { supabaseUrl, supabaseKey } from '../config/env';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from '../config/database';
 
 export interface AuthenticatedRequest extends Request {
   userId?: string;
