@@ -1,7 +1,6 @@
 import express from 'express';
 import authRouter from './routes/auth';
-import booksRouter from './routes/books';
-import wishlistRouter from './routes/wishlist';
+import bookRouter from './routes/book';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
@@ -36,7 +35,6 @@ app.use(helmetOptions);
 app.use(hpp());
 
 app.use('/auth', authRouter);
-app.use('/books', authMiddleware, booksRouter);
-app.use('/wishlist', authMiddleware, wishlistRouter);
+app.use('/book', authMiddleware, bookRouter);
 
 export default app;
