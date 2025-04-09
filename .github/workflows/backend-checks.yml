@@ -34,7 +34,6 @@ jobs:
 
   unit-test:
     name: Unit Tests
-    if: false
     runs-on: ubuntu-latest
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
