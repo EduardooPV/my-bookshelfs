@@ -85,19 +85,29 @@ const getAuthorName = async (authorKey: string) => {
 export const readingBookService = async (bookId: string, userId: string) => {
   const book = await getBookService(bookId);
 
-  const { data: bookAlreadyExist, error: checkError } = await supabase
+  const { data: bookAlreadyExist } = await supabase
     .from('books')
-    .select('book_id')
+    .select('*')
     .eq('book_id', bookId)
     .eq('user_id', userId)
-    .maybeSingle();
-
-  if (checkError) {
-    throw new Error('Erro ao verificar livro');
-  }
+    .single();
 
   if (bookAlreadyExist) {
-    throw new Error('Você já está lendo este livro.');
+    const { data, error } = await supabase
+      .from('books')
+      .update({
+        status: 'reading',
+        start_at: new Date(),
+      })
+      .eq('book_id', bookId)
+      .eq('user_id', userId)
+      .select();
+
+    if (error) {
+      throw new Error(`Erro ao atualizar o livro: ${error.message}`);
+    }
+
+    return data;
   }
 
   const { data, error } = await supabase
@@ -111,17 +121,155 @@ export const readingBookService = async (bookId: string, userId: string) => {
         cover: book.cover,
         description: book.description,
         status: 'reading',
+        start_at: new Date(),
       },
     ])
     .select();
 
   if (error) {
-    throw new Error(`Erro ao inserir livro: ${error.message}`);
+    throw new Error(`Erro ao criar o livro: ${error.message}`);
   }
 
   return data;
 };
 
-export const deleteBookService = () => {};
-export const doneBookService = () => {};
-export const wishlistBookService = () => {};
+export const doneBookService = async (bookId: string, userId: string) => {
+  const book = await getBookService(bookId);
+
+  const { data: bookAlreadyExist } = await supabase
+    .from('books')
+    .select('*')
+    .eq('book_id', bookId)
+    .eq('user_id', userId)
+    .single();
+
+  if (bookAlreadyExist) {
+    const completionDate = new Date();
+
+    const updatePayload: {
+      status: string;
+      completion_at: Date;
+      start_at: Date | null;
+    } = {
+      status: 'done',
+      completion_at: completionDate,
+      start_at: null,
+    };
+
+    if (!bookAlreadyExist.start_at) {
+      updatePayload.start_at = completionDate;
+    }
+
+    const { data, error } = await supabase
+      .from('books')
+      .update(updatePayload)
+      .eq('book_id', bookId)
+      .eq('user_id', userId)
+      .select();
+
+    if (error) {
+      throw new Error(`Erro ao atualizar o livro: ${error.message}`);
+    }
+
+    return data;
+  }
+
+  const { data, error } = await supabase
+    .from('books')
+    .insert([
+      {
+        book_id: bookId,
+        user_id: userId,
+        author: book.author,
+        title: book.title,
+        cover: book.cover,
+        description: book.description,
+        status: 'done',
+        start_at: new Date(),
+        completion_at: new Date(),
+      },
+    ])
+    .select();
+
+  if (error) {
+    throw new Error(`Erro ao criar o livro: ${error.message}`);
+  }
+
+  return data;
+};
+
+export const wishlistBookService = async (bookId: string, userId: string) => {
+  const book = await getBookService(bookId);
+
+  const { data: bookAlreadyExist } = await supabase
+    .from('books')
+    .select('*')
+    .eq('book_id', bookId)
+    .eq('user_id', userId)
+    .single();
+
+  if (bookAlreadyExist) {
+    const { data, error } = await supabase
+      .from('books')
+      .update({
+        status: 'wishlist',
+        start_at: null,
+        completion_at: null,
+      })
+      .eq('book_id', bookId)
+      .eq('user_id', userId)
+      .select();
+
+    if (error) {
+      throw new Error(`Erro ao atualizar o livro: ${error.message}`);
+    }
+
+    return data;
+  }
+
+  const { data, error } = await supabase
+    .from('books')
+    .insert([
+      {
+        book_id: bookId,
+        user_id: userId,
+        author: book.author,
+        title: book.title,
+        cover: book.cover,
+        description: book.description,
+        status: 'wishlist',
+        start_at: null,
+        completion_at: null,
+      },
+    ])
+    .select();
+
+  if (error) {
+    throw new Error(`Erro ao criar o livro: ${error.message}`);
+  }
+
+  return data;
+};
+
+export const deleteBookService = async (bookId: string, userId: string) => {
+  const { data: bookAlreadyExist } = await supabase
+    .from('books')
+    .select('*')
+    .eq('book_id', bookId)
+    .eq('user_id', userId)
+    .single();
+
+  if (!bookAlreadyExist) {
+    throw new Error('Livro não encontrado');
+  }
+
+  const { error } = await supabase
+    .from('books')
+    .delete()
+    .eq('book_id', bookId)
+    .eq('user_id', userId);
+
+  if (error) {
+    throw new Error('Livro ao excluir o livro');
+  }
+};
