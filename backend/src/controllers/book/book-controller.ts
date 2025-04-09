@@ -37,10 +37,6 @@ export const getBookControler = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteBookController = () => {
-  deleteBookService();
-};
-
 export const readingBookController = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -58,9 +54,57 @@ export const readingBookController = async (
     res.status(400).json({ error: (error as Error).message });
   }
 };
-export const doneBookController = () => {
-  doneBookService();
+
+export const doneBookController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+) => {
+  try {
+    const { bookId } = req.params;
+    const userId = req.userId;
+
+    if (userId) {
+      const book = await doneBookService(bookId, userId);
+
+      res.status(201).json({ book });
+    }
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
 };
-export const wishlistBookController = () => {
-  wishlistBookService();
+
+export const wishlistBookController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+) => {
+  try {
+    const { bookId } = req.params;
+    const userId = req.userId;
+
+    if (userId) {
+      const book = await wishlistBookService(bookId, userId);
+
+      res.status(201).json({ book });
+    }
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
+export const deleteBookController = async (
+  req: AuthenticatedRequest,
+  res: Response,
+) => {
+  try {
+    const { bookId } = req.params;
+    const userId = req.userId;
+
+    if (userId) {
+      await deleteBookService(bookId, userId);
+
+      res.status(201).json({ success: 'Livro excluido com sucesso' });
+    }
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
 };
