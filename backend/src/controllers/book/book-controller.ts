@@ -9,7 +9,7 @@ import {
 } from '../../services/book';
 import { AuthenticatedRequest } from '../../middleware/auth-middleware';
 
-export const getAllBooksController = async (req: Request, res: Response) => {
+const getAllBooksController = async (req: Request, res: Response) => {
   try {
     const { search = '', page = 1, limit = 10 } = req.query;
 
@@ -25,7 +25,7 @@ export const getAllBooksController = async (req: Request, res: Response) => {
   }
 };
 
-export const getBookControler = async (req: Request, res: Response) => {
+const getBookControler = async (req: Request, res: Response) => {
   try {
     const { bookId } = req.params;
 
@@ -37,7 +37,7 @@ export const getBookControler = async (req: Request, res: Response) => {
   }
 };
 
-export const readingBookController = async (
+const readingBookController = async (
   req: AuthenticatedRequest,
   res: Response,
 ) => {
@@ -55,10 +55,7 @@ export const readingBookController = async (
   }
 };
 
-export const doneBookController = async (
-  req: AuthenticatedRequest,
-  res: Response,
-) => {
+const doneBookController = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { bookId } = req.params;
     const userId = req.userId;
@@ -73,7 +70,7 @@ export const doneBookController = async (
   }
 };
 
-export const wishlistBookController = async (
+const wishlistBookController = async (
   req: AuthenticatedRequest,
   res: Response,
 ) => {
@@ -91,7 +88,7 @@ export const wishlistBookController = async (
   }
 };
 
-export const deleteBookController = async (
+const deleteBookController = async (
   req: AuthenticatedRequest,
   res: Response,
 ) => {
@@ -107,4 +104,13 @@ export const deleteBookController = async (
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
+};
+
+export {
+  getAllBooksController,
+  getBookControler,
+  readingBookController,
+  doneBookController,
+  wishlistBookController,
+  deleteBookController,
 };

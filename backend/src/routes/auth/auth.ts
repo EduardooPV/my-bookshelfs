@@ -15,4 +15,4 @@ router.post('/signout', signOutController);
 router.post('/forgot-password', forgotPasswordController);
 router.post('/reset-password', resetPasswordController);
 
-export default router;
+export { router };
