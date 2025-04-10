@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const supabaseUrl = process.env.SUPABASE_URL!;
-export const supabaseKey = process.env.SUPABASE_KEY!;
-export const port = process.env.PORT || 3001;
+const supabaseUrl = process.env.SUPABASE_URL!;
+const supabaseKey = process.env.SUPABASE_KEY!;
+const port = process.env.PORT || 3001;
+
+export { supabaseUrl, supabaseKey, port };

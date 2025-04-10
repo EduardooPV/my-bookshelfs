@@ -1,9 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
-import { supabaseUrl, supabaseKey } from '../../config/env';
+import { supabase } from '../../config/database';
 
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-export const signUp = async (email: string, password: string) => {
+const signUp = async (email: string, password: string) => {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -16,7 +13,7 @@ export const signUp = async (email: string, password: string) => {
   return data.user;
 };
 
-export const signIn = async (email: string, password: string) => {
+const signIn = async (email: string, password: string) => {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -29,7 +26,7 @@ export const signIn = async (email: string, password: string) => {
   return data.session;
 };
 
-export const signOut = async () => {
+const signOut = async () => {
   const { error } = await supabase.auth.signOut();
 
   if (error) {
@@ -39,7 +36,7 @@ export const signOut = async () => {
   return 'Usuário deslogado';
 };
 
-export const forgotPassword = async (email: string) => {
+const forgotPassword = async (email: string) => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: 'http://localhost:3000/reset-password',
   });
@@ -51,7 +48,7 @@ export const forgotPassword = async (email: string) => {
   return 'E-mail de redefinição de senha enviado com sucesso!';
 };
 
-export const resetPassword = async (password: string) => {
+const resetPassword = async (password: string) => {
   const { error } = await supabase.auth.updateUser({
     password,
   });
@@ -62,3 +59,5 @@ export const resetPassword = async (password: string) => {
 
   return 'Senha redefinida com sucesso!';
 };
+
+export { signUp, signIn, signOut, forgotPassword, resetPassword };

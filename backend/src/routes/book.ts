@@ -17,4 +17,4 @@ router.post('/:bookId/done', doneBookController);
 router.post('/:bookId/wishlist', wishlistBookController);
 router.delete('/:bookId', deleteBookController);
 
-export default router;
+export { router };
