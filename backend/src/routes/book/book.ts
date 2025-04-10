@@ -6,7 +6,7 @@ import {
   readingBookController,
   doneBookController,
   wishlistBookController,
-} from '../controllers/book';
+} from '../../controllers/book';
 
 const router = Router();
 
