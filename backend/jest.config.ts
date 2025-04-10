@@ -12,6 +12,6 @@ module.exports = {
     '!src/index.ts',
     '!src/app.ts',
   ],
-  coverageDirectory: 'coverage', 
+  coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],
 };
