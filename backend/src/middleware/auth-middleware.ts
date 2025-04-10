@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { supabase } from '../config/database';
 
-export interface AuthenticatedRequest extends Request {
+interface AuthenticatedRequest extends Request {
   userId?: string;
 }
 
-export const authMiddleware = async (
+const authMiddleware = async (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction,
@@ -41,3 +41,5 @@ export const authMiddleware = async (
     });
   }
 };
+
+export { authMiddleware, AuthenticatedRequest };

@@ -7,7 +7,7 @@ import {
   resetPassword,
 } from '../../services/auth';
 
-export const signUpController = async (req: Request, res: Response) => {
+const signUpController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -19,7 +19,7 @@ export const signUpController = async (req: Request, res: Response) => {
   }
 };
 
-export const signInController = async (req: Request, res: Response) => {
+const signInController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -31,7 +31,7 @@ export const signInController = async (req: Request, res: Response) => {
   }
 };
 
-export const signOutController = async (req: Request, res: Response) => {
+const signOutController = async (req: Request, res: Response) => {
   try {
     const out = await signOut();
 
@@ -41,7 +41,7 @@ export const signOutController = async (req: Request, res: Response) => {
   }
 };
 
-export const forgotPasswordController = async (req: Request, res: Response) => {
+const forgotPasswordController = async (req: Request, res: Response) => {
   const { email } = req.body;
 
   try {
@@ -53,7 +53,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
   }
 };
 
-export const resetPasswordController = async (req: Request, res: Response) => {
+const resetPasswordController = async (req: Request, res: Response) => {
   const { password } = req.body;
 
   try {
@@ -63,4 +63,12 @@ export const resetPasswordController = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
+};
+
+export {
+  signUpController,
+  signInController,
+  signOutController,
+  forgotPasswordController,
+  resetPasswordController,
 };

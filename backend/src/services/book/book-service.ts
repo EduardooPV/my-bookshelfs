@@ -1,7 +1,7 @@
 import { supabase } from '../../config/database';
 import { IBook, IBookListResponse, IOpenLibraryBook } from './types';
 
-export const getBookService = async (bookId: string): Promise<IBook> => {
+const getBookService = async (bookId: string): Promise<IBook> => {
   const baseUrl = 'https://openlibrary.org';
 
   const workResponse = await fetch(`${baseUrl}/works/${bookId}.json`);
@@ -39,7 +39,7 @@ export const getBookService = async (bookId: string): Promise<IBook> => {
   return book;
 };
 
-export const getAllBooksService = async (
+const getAllBooksService = async (
   searchQuery: string,
   page = 1,
   limit = 10,
@@ -82,7 +82,7 @@ const getAuthorName = async (authorKey: string) => {
   return data.name || 'Autor desconhecido';
 };
 
-export const readingBookService = async (bookId: string, userId: string) => {
+const readingBookService = async (bookId: string, userId: string) => {
   const book = await getBookService(bookId);
 
   const { data: bookAlreadyExist } = await supabase
@@ -133,7 +133,7 @@ export const readingBookService = async (bookId: string, userId: string) => {
   return data;
 };
 
-export const doneBookService = async (bookId: string, userId: string) => {
+const doneBookService = async (bookId: string, userId: string) => {
   const book = await getBookService(bookId);
 
   const { data: bookAlreadyExist } = await supabase
@@ -198,7 +198,7 @@ export const doneBookService = async (bookId: string, userId: string) => {
   return data;
 };
 
-export const wishlistBookService = async (bookId: string, userId: string) => {
+const wishlistBookService = async (bookId: string, userId: string) => {
   const book = await getBookService(bookId);
 
   const { data: bookAlreadyExist } = await supabase
@@ -251,7 +251,7 @@ export const wishlistBookService = async (bookId: string, userId: string) => {
   return data;
 };
 
-export const deleteBookService = async (bookId: string, userId: string) => {
+const deleteBookService = async (bookId: string, userId: string) => {
   const { data: bookAlreadyExist } = await supabase
     .from('books')
     .select('*')
@@ -272,4 +272,13 @@ export const deleteBookService = async (bookId: string, userId: string) => {
   if (error) {
     throw new Error('Livro ao excluir o livro');
   }
+};
+
+export {
+  getBookService,
+  getAllBooksService,
+  readingBookService,
+  doneBookService,
+  wishlistBookService,
+  deleteBookService,
 };

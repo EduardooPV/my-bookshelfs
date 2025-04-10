@@ -5,7 +5,7 @@ import {
   signOutController,
   forgotPasswordController,
   resetPasswordController,
-} from '../controllers/auth';
+} from '../../controllers/auth';
 
 const router = Router();
 
@@ -15,4 +15,4 @@ router.post('/signout', signOutController);
 router.post('/forgot-password', forgotPasswordController);
 router.post('/reset-password', resetPasswordController);
 
-export default router;
+export { router };
