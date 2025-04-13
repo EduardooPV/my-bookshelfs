@@ -41,6 +41,8 @@ jobs:
         working-directory: frontend
 
       - name: Build Project
+        env:
+          VERCEL_SKIP_BUILD: 1
         run: npm run build
         working-directory: frontend
 
@@ -51,8 +53,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FRONT_PROJECT_ID }}
         run: |
-          vercel build
-          DEPLOY_URL=$(vercel --prod --token $VERCEL_TOKEN)
+          DEPLOY_URL=$(vercel deploy --prebuilt --prod --token $VERCEL_TOKEN)
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
         working-directory: frontend
 
@@ -63,8 +64,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FRONT_PROJECT_ID }}
         run: |
-          vercel build
-          DEPLOY_URL=$(vercel --prebuilt --token $VERCEL_TOKEN)
+          DEPLOY_URL=$(vercel deploy --prebuilt --token $VERCEL_TOKEN)
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
         working-directory: frontend
 
