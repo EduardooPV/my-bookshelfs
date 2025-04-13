@@ -1,17 +1,17 @@
-name: Backend - Deploy to Vercel
+name: Frontend - Deploy to Vercel
 
 on:
   push:
     branches:
       - main
     paths:
-      - "backend/**"
+      - "frontend/**"
   pull_request:
     types: [opened, reopened, synchronize]
     branches:
       - staging
     paths:
-      - "backend/**"
+      - "frontend/**"
 
 jobs:
   deploy:
@@ -27,46 +27,46 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: npm install
-        working-directory: backend
+        run: npm install --legacy-peer-deps
+        working-directory: frontend
 
       - name: Install Vercel CLI
-        run: npm install -g vercel
-        working-directory: backend
+        run: npm install --legacy-peer-deps -g vercel
+        working-directory: frontend
 
       - name: Pull Vercel Project Settings
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: vercel pull --yes --token $VERCEL_TOKEN
-        working-directory: backend
+        working-directory: frontend
 
       - name: Build Project
         run: npm run build
-        working-directory: backend
+        working-directory: frontend
 
       - name: Deploy to Vercel (Production)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FRONT_PROJECT_ID }}
         run: |
           vercel build
           DEPLOY_URL=$(vercel --prod --token $VERCEL_TOKEN)
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
-        working-directory: backend
+        working-directory: frontend
 
       - name: Deploy to Vercel (Staging)
         if: github.event_name == 'pull_request' && github.base_ref == 'staging'
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FRONT_PROJECT_ID }}
         run: |
           vercel build
           DEPLOY_URL=$(vercel --prebuilt --token $VERCEL_TOKEN)
           echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
-        working-directory: backend
+        working-directory: frontend
 
       - name: Create GitHub Commit Status (Production)
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -90,7 +90,7 @@ jobs:
           DEPLOY_URL: ${{ env.DEPLOY_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          COMMENT="🚀 Deploy staging do backend disponível em: $DEPLOY_URL"
+          COMMENT="🚀 Deploy staging do frontend disponível em: $DEPLOY_URL"
           curl -s -H "Authorization: token $GITHUB_TOKEN" \
                -X POST \
                -d "{\"body\": \"$COMMENT\"}" \
