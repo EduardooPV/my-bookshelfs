@@ -90,7 +90,7 @@ jobs:
           DEPLOY_URL: ${{ env.DEPLOY_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          COMMENT="🚀 Deploy staging disponível em: $DEPLOY_URL"
+          COMMENT="🚀 Deploy staging do frontend disponível em: $DEPLOY_URL"
           curl -s -H "Authorization: token $GITHUB_TOKEN" \
                -X POST \
                -d "{\"body\": \"$COMMENT\"}" \
