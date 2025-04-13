@@ -90,7 +90,7 @@ export default function Dashboard() {
         <Card className="md:col-span-3">
           <CardHeader>
             <CardTitle>Recently Added</CardTitle>
-            <CardDescription>Books you've recently added to your shelves</CardDescription>
+            <CardDescription>Books you&apos;ve recently added to your shelves</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

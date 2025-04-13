@@ -62,14 +62,14 @@ export default function Home() {
                     <BookOpen className="h-10 w-10 text-primary" />
                     <h3 className="text-xl font-bold">Currently Reading</h3>
                     <p className="text-center text-sm text-muted-foreground">
-                      Track your progress on books you're currently reading
+                      Track your progress on books you&apos;re currently reading
                     </p>
                   </div>
                   <div className="flex flex-col items-center gap-2 rounded-lg bg-muted p-4 md:p-6">
                     <BookText className="h-10 w-10 text-primary" />
                     <h3 className="text-xl font-bold">Read</h3>
                     <p className="text-center text-sm text-muted-foreground">
-                      Review and rate books you've finished reading
+                      Review and rate books you&apos;ve finished reading
                     </p>
                   </div>
                 </div>
@@ -120,7 +120,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold">Rating System</h3>
                 <p className="text-center text-muted-foreground">
-                  Rate and review books you've read to share your thoughts with others
+                  Rate and review books you&apos;ve read to share your thoughts with others
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg p-4">

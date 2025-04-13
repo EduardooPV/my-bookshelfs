@@ -31,7 +31,7 @@ jobs:
         working-directory: frontend
 
       - name: Install Vercel CLI
-        run: npm install -g vercel
+        run: npm install --legacy-peer-deps -g vercel
         working-directory: frontend
 
       - name: Pull Vercel Project Settings

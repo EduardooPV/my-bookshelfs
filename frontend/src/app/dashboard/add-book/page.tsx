@@ -20,8 +20,8 @@ import Image from 'next/image';
 
 export default function AddBook() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [selectedBook, setSelectedBook] = useState<any>(null);
+  const [searchResults, setSearchResults] = useState<unknown[]>([]);
+  const [selectedBook, setSelectedBook] = useState<unknown>(null);
   const [bookStatus, setBookStatus] = useState('want-to-read');
 
   // Mock search function
@@ -61,7 +61,7 @@ export default function AddBook() {
     }
   };
 
-  const handleSelectBook = (book: any) => {
+  const handleSelectBook = (book: unknown) => {
     setSelectedBook(book);
     setSearchResults([]);
   };
@@ -115,7 +115,7 @@ export default function AddBook() {
                 <h3 className="text-sm font-medium">Search Results</h3>
                 <div className="space-y-2">
                   {searchResults.map((book) => (
-                    <div
+                    <button
                       key={book.id}
                       className="flex cursor-pointer items-center gap-4 rounded-lg border p-3 hover:bg-muted"
                       onClick={() => handleSelectBook(book)}
@@ -133,7 +133,7 @@ export default function AddBook() {
                           {book.author} • {book.publishedDate}
                         </p>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>

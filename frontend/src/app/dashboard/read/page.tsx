@@ -64,7 +64,7 @@ export default function Read() {
             <BookText className="h-6 w-6" />
             Read
           </h1>
-          <p className="text-muted-foreground">Books you've finished reading</p>
+          <p className="text-muted-foreground">Books you&apos;ve finished reading</p>
         </div>
         <Button className="gap-1">
           <Plus className="h-4 w-4" />

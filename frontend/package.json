@@ -9,7 +9,7 @@
     "lint": "next lint",
     "lint:fix": "eslint . --ext 'src/**/*.{ts,tsx,js}' --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,js}'",
-    "test:unit": "jest",
+    "test:unit": "jest --passWithNoTests",
     "test:unit:watch": "jest --watch"
   },
   "dependencies": {

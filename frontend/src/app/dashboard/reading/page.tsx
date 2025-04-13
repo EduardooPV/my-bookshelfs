@@ -38,7 +38,7 @@ export default function Reading() {
             <BookOpen className="h-6 w-6" />
             Currently Reading
           </h1>
-          <p className="text-muted-foreground">Books you're currently reading</p>
+          <p className="text-muted-foreground">Books you&apos;re currently reading</p>
         </div>
         <Button className="gap-1">
           <Plus className="h-4 w-4" />

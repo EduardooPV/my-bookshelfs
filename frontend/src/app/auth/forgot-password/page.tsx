@@ -36,7 +36,7 @@ export default function ForgotPassword() {
             </div>
             <h1 className="text-2xl font-semibold tracking-tight">Forgot password</h1>
             <p className="text-sm text-muted-foreground">
-              Enter your email address and we'll send you a link to reset your password
+              Enter your email address and we&apos;ll send you a link to reset your password
             </p>
           </div>
           {!submitted ? (
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
               <div className="text-center">
                 <h3 className="text-lg font-medium">Check your email</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  We've sent a password reset link to {email}
+                  We&apos;ve sent a password reset link to {email}
                 </p>
               </div>
               <Button variant="outline" className="w-full" onClick={() => setSubmitted(false)}>
