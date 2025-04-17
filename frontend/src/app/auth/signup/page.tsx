@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import type React from 'react';
@@ -8,17 +9,63 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { BookOpen, ArrowLeft, User, Mail, Lock, Github, ChromeIcon as Google } from 'lucide-react';
+import {
+  BookOpen,
+  ArrowLeft,
+  User,
+  Mail,
+  Lock,
+  Github,
+  ChromeIcon as Google,
+  LoaderCircleIcon,
+} from 'lucide-react';
+import { httpService } from '../../../utils/http-service';
+import { toast } from '../../../hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import { ToggleEye } from '../../../components/common/ToggleEye';
+import { mapSupabaseError } from '../../../lib/map-errors';
 
 export default function SignUp() {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign up logic here
-    console.log('Sign up with:', name, email, password);
+
+    try {
+      setLoading(true);
+
+      await httpService('/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+
+      await fetch('/api/auth/signin', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      toast({
+        variant: 'success',
+        description: 'Sua conta foi criada com sucesso.',
+      });
+
+      router.push('/dashboard');
+    } catch (err: any) {
+      const message = mapSupabaseError(err?.error ?? err);
+      toast({
+        variant: 'error',
+        description: message,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,42 +74,24 @@ export default function SignUp() {
         <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8">
           <Button variant="ghost" className="gap-1">
             <ArrowLeft className="h-4 w-4" />
-            Back
+            Voltar
           </Button>
         </Link>
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <div className="flex flex-col space-y-2 text-center">
+          <div className="flex flex-col space-y-4 text-center">
             <div className="flex justify-center">
               <BookOpen className="h-8 w-8" />
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">Criar uma conta</h1>
             <p className="text-sm text-muted-foreground">
-              Enter your information to create an account
+              Insira suas informações para criar uma conta
             </p>
           </div>
-          <div className="grid gap-6">
+          <div className="grid gap-8">
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-4">
+              <div className="grid gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="name">Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="name"
-                      placeholder="John Doe"
-                      type="text"
-                      autoCapitalize="words"
-                      autoComplete="name"
-                      autoCorrect="off"
-                      className="pl-10"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">E-mail</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -80,47 +109,51 @@ export default function SignUp() {
                   </div>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="password"
-                      type="password"
-                      className="pl-10"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                  </div>
+                  <Label htmlFor="password">Senha</Label>
+                  <ToggleEye password={password} setPassword={setPassword} />
                 </div>
-                <Button type="submit" className="w-full">
-                  Create Account
+
+                <Button type="submit" className="w-full" disabled={loading ? true : false}>
+                  {loading ? (
+                    <span className="animate-spin">
+                      <LoaderCircleIcon />
+                    </span>
+                  ) : (
+                    'Criar conta'
+                  )}
                 </Button>
               </div>
             </form>
+
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
               </div>
+            </div>
+
+            {/* <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <Separator className="w-full" />
+              </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-background px-2 text-muted-foreground">Ou continue com</span>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" disabled>
                 <Github className="mr-2 h-4 w-4" />
                 Github
               </Button>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" disabled>
                 <Google className="mr-2 h-4 w-4" />
                 Google
               </Button>
-            </div>
+            </div> */}
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
+            Já tem uma conta?{' '}
             <Link href="/auth/signin" className="underline underline-offset-4 hover:text-primary">
-              Sign in
+              Entrar
             </Link>
           </p>
         </div>

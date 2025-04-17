@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import type React from 'react';
@@ -8,16 +9,59 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { BookOpen, ArrowLeft, Mail, Lock, Github, ChromeIcon as Google } from 'lucide-react';
+import {
+  BookOpen,
+  ArrowLeft,
+  Mail,
+  Lock,
+  Github,
+  ChromeIcon as Google,
+  LoaderCircleIcon,
+  Eye,
+  EyeOff,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { toast } from '../../../hooks/use-toast';
+import { ToggleEye } from '../../../components/common/ToggleEye';
+import { mapSupabaseError } from '../../../lib/map-errors';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign in logic here
-    console.log('Sign in with:', email, password);
+
+    try {
+      setLoading(true);
+
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw { message: data.error };
+      }
+
+      router.push('/dashboard');
+    } catch (err: any) {
+      const message = mapSupabaseError(err.error ?? err);
+      toast({
+        variant: 'error',
+        description: message,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -26,24 +70,24 @@ export default function SignIn() {
         <Link href="/" className="absolute left-4 top-4 md:left-8 md:top-8">
           <Button variant="ghost" className="gap-1">
             <ArrowLeft className="h-4 w-4" />
-            Back
+            Voltar
           </Button>
         </Link>
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <div className="flex flex-col space-y-2 text-center">
+          <div className="flex flex-col space-y-4 text-center">
             <div className="flex justify-center">
               <BookOpen className="h-8 w-8" />
             </div>
-            <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">Bem vindo de volta</h1>
             <p className="text-sm text-muted-foreground">
-              Enter your email and password to sign in to your account
+              Digite seu e-mail e senha para entrar em sua conta
             </p>
           </div>
-          <div className="grid gap-6">
+          <div className="grid gap-8">
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-4">
+              <div className="grid gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">E-mail</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -62,32 +106,34 @@ export default function SignIn() {
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">Senha</Label>
                     <Link
                       href="/auth/forgot-password"
                       className="text-sm font-medium text-primary underline-offset-4 hover:underline"
                     >
-                      Forgot password?
+                      Esqueceu sua senha?
                     </Link>
                   </div>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="password"
-                      type="password"
-                      className="pl-10"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                  </div>
+                  <ToggleEye password={password} setPassword={setPassword} />
                 </div>
                 <Button type="submit" className="w-full">
-                  Sign In
+                  {loading ? (
+                    <span className="animate-spin">
+                      <LoaderCircleIcon />
+                    </span>
+                  ) : (
+                    'Entrar'
+                  )}
                 </Button>
               </div>
             </form>
+
             <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <Separator className="w-full" />
+              </div>
+            </div>
+            {/* <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
               </div>
@@ -104,12 +150,12 @@ export default function SignIn() {
                 <Google className="mr-2 h-4 w-4" />
                 Google
               </Button>
-            </div>
+            </div> */}
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
+            Não tem uma conta?{' '}
             <Link href="/auth/signup" className="underline underline-offset-4 hover:text-primary">
-              Sign up
+              Cadastrar
             </Link>
           </p>
         </div>

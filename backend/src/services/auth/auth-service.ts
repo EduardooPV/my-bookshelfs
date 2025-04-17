@@ -38,7 +38,7 @@ const signOut = async () => {
 
 const forgotPassword = async (email: string) => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'http://localhost:3000/reset-password',
+    redirectTo: 'http://localhost:3000/auth/reset-password',
   });
 
   if (error) {
