@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import type React from 'react';
@@ -9,40 +8,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BookOpen, ArrowLeft, Mail, LoaderCircleIcon } from 'lucide-react';
-import { httpService } from '../../../utils/http-service';
-import { API_URL } from '../../../utils/config';
-import { toast } from '../../../hooks/use-toast';
-import { mapSupabaseError } from '../../../lib/map-errors';
+import { useUserAuth } from '../../../hooks/use-user-auth';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { submitted, setSubmitted, loading, forgotPassword } = useUserAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      setLoading(true);
-
-      await fetch(`${API_URL}/auth/forgot-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      setSubmitted(true);
-    } catch (err: any) {
-      const message = mapSupabaseError(err.error ?? err);
-      toast({
-        variant: 'error',
-        description: message,
-      });
-    } finally {
-      setLoading(false);
-    }
+    forgotPassword(email);
   };
 
   return (

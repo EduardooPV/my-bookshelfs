@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import type React from 'react';
@@ -19,53 +18,17 @@ import {
   ChromeIcon as Google,
   LoaderCircleIcon,
 } from 'lucide-react';
-import { httpService } from '../../../utils/http-service';
-import { toast } from '../../../hooks/use-toast';
-import { useRouter } from 'next/navigation';
 import { ToggleEye } from '../../../components/common/ToggleEye';
-import { mapSupabaseError } from '../../../lib/map-errors';
+import { useUserAuth } from '../../../hooks/use-user-auth';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const { signup, loading } = useUserAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-      setLoading(true);
-
-      await httpService('/auth/signup', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      });
-
-      await fetch('/api/auth/signin', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      toast({
-        variant: 'success',
-        description: 'Sua conta foi criada com sucesso.',
-      });
-
-      router.push('/dashboard');
-    } catch (err: any) {
-      const message = mapSupabaseError(err?.error ?? err);
-      toast({
-        variant: 'error',
-        description: message,
-      });
-    } finally {
-      setLoading(false);
-    }
+    signup(email, password);
   };
 
   return (

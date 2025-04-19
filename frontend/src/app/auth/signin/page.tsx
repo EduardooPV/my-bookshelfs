@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import type React from 'react';
@@ -20,48 +19,18 @@ import {
   Eye,
   EyeOff,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { toast } from '../../../hooks/use-toast';
 import { ToggleEye } from '../../../components/common/ToggleEye';
-import { mapSupabaseError } from '../../../lib/map-errors';
+import { useUserAuth } from '../../../hooks/use-user-auth';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const { signin, loading } = useUserAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      setLoading(true);
-
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw { message: data.error };
-      }
-
-      router.push('/dashboard');
-    } catch (err: any) {
-      const message = mapSupabaseError(err.error ?? err);
-      toast({
-        variant: 'error',
-        description: message,
-      });
-    } finally {
-      setLoading(false);
-    }
+    signin(email, password);
   };
 
   return (
