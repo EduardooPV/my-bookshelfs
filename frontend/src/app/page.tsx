@@ -9,14 +9,14 @@ export default function Home() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2 font-semibold">
             <BookOpen className="h-6 w-6" />
-            <span className="text-xl">BookTracker</span>
+            <span className="text-xl">My bookshelfs</span>
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/auth/signin">
-              <Button variant="ghost">Sign In</Button>
+              <Button variant="ghost">Entrar</Button>
             </Link>
             <Link href="/auth/signup">
-              <Button>Get Started</Button>
+              <Button>Cadastrar</Button>
             </Link>
           </nav>
         </div>
@@ -24,27 +24,22 @@ export default function Home() {
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
+            <div className="grid gap-6 lg:grid-cols-[minmax(400px,_580px)_1fr] lg:gap-12">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                    Track your reading journey
+                    Acompanhe sua jornada de leitura
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                    Organize your books, share your thoughts, and discover new reads with our modern
-                    book tracking platform.
+                    Organize seus livros, compartilhe seus pensamentos e descubra novas leituras com
+                    nossa moderna plataforma de controle de livros.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Link href="/auth/signup">
                     <Button size="lg" className="gap-1.5">
-                      Get Started
+                      Cadastrar
                       <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <Link href="/about">
-                    <Button size="lg" variant="outline">
-                      Learn More
                     </Button>
                   </Link>
                 </div>
@@ -53,23 +48,23 @@ export default function Home() {
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                   <div className="flex flex-col items-center gap-2 rounded-lg bg-muted p-4 md:p-6">
                     <BookMarked className="h-10 w-10 text-primary" />
-                    <h3 className="text-xl font-bold">Want to Read</h3>
+                    <h3 className="text-xl font-bold">Lista de desejo</h3>
                     <p className="text-center text-sm text-muted-foreground">
-                      Keep track of books you want to read in the future
+                      Acompanhe os livros que você deseja ler no futuro.
                     </p>
                   </div>
                   <div className="flex flex-col items-center gap-2 rounded-lg bg-muted p-4 md:p-6">
                     <BookOpen className="h-10 w-10 text-primary" />
-                    <h3 className="text-xl font-bold">Currently Reading</h3>
+                    <h3 className="text-center text-xl font-bold">Lendo atualmente</h3>
                     <p className="text-center text-sm text-muted-foreground">
-                      Track your progress on books you&apos;re currently reading
+                      Acompanhe seu progresso nos livros que você está lendo no momento
                     </p>
                   </div>
                   <div className="flex flex-col items-center gap-2 rounded-lg bg-muted p-4 md:p-6">
                     <BookText className="h-10 w-10 text-primary" />
-                    <h3 className="text-xl font-bold">Read</h3>
+                    <h3 className="text-xl font-bold">Lido</h3>
                     <p className="text-center text-sm text-muted-foreground">
-                      Review and rate books you&apos;ve finished reading
+                      Revise e classifique os livros que você terminou de ler
                     </p>
                   </div>
                 </div>
@@ -85,7 +80,7 @@ export default function Home() {
                   Features
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Everything you need to manage your reading life in one place
+                  Tudo o que você precisa para gerenciar sua vida de leitura em um só lugar
                 </p>
               </div>
             </div>
@@ -94,9 +89,9 @@ export default function Home() {
                 <div className="rounded-full bg-primary p-2 text-primary-foreground">
                   <BookOpen className="h-6 w-6" />
                 </div>
-                <h3 className="text-xl font-bold">Book Organization</h3>
+                <h3 className="text-xl font-bold">Organize seus livros</h3>
                 <p className="text-center text-muted-foreground">
-                  Organize your books into Want to Read, Currently Reading, and Read categories
+                  Organize seus livros nas categorias Lista de desejo, Lendo atualmente e Lidos
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg p-4">
@@ -118,9 +113,10 @@ export default function Home() {
                     <path d="M15.1 18H3" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold">Rating System</h3>
+                <h3 className="text-xl font-bold">Sistema de classificação</h3>
                 <p className="text-center text-muted-foreground">
-                  Rate and review books you&apos;ve read to share your thoughts with others
+                  Avalie e comente livros que você leu para compartilhar suas ideias com outras
+                  pessoas
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg p-4">
@@ -141,9 +137,9 @@ export default function Home() {
                     <path d="m21 21-4.3-4.3" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold">Smart Search</h3>
+                <h3 className="text-xl font-bold">Pesquisa inteligente</h3>
                 <p className="text-center text-muted-foreground">
-                  Find books by title, author, or genre with our intelligent search system
+                  Encontre livros por título, autor ou gênero com nosso sistema de busca inteligente
                 </p>
               </div>
             </div>
@@ -154,10 +150,10 @@ export default function Home() {
         <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="flex items-center gap-2">
             <BookOpen className="h-6 w-6" />
-            <span className="text-lg font-semibold">BookTracker</span>
+            <span className="text-lg font-semibold">My bookshelfs</span>
           </div>
           <p className="text-center text-sm text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} BookTracker. All rights reserved.
+            &copy; 2025 My bookshelfs. Todos os direitos reservados.
           </p>
         </div>
       </footer>
