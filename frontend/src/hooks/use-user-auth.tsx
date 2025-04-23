@@ -164,10 +164,15 @@ export function useUserAuth() {
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-      router.push('/login');
+      setLoading(true);
+
+      await fetch(`api/auth/logout`, { method: 'POST', credentials: 'include' });
+
+      router.push('/');
     } catch {
-      toast({ variant: 'error', description: 'Erro ao fazer logout.' });
+      toast({ variant: 'error', description: 'Erro ao sair.' });
+    } finally {
+      setLoading(false);
     }
   };
 

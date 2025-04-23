@@ -12,10 +12,21 @@ import { requestLogger } from './middleware/request-logger-middleware';
 const jsonOptions = express.json({ limit: '10kb' });
 
 const corsOptions = cors({
-  origin: '*',
+  origin: (origin: string | undefined, callback: Function) => {
+    if (
+      !origin ||
+      origin.startsWith('https://my-bookshelfs-frontend') ||
+      'http://localhost:3000'
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: 'GET,POST,PUT,DELETE',
   allowedHeaders: 'Content-Type, Authorization',
   optionsSuccessStatus: 200,
+  credentials: true,
 });
 
 const rateLimitOptions = rateLimit({
