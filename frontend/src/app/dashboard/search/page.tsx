@@ -103,11 +103,11 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="container mx-auto max-w-6xl py-6">
+    <div className=" mx-auto max-w-6xl">
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Search Books</h1>
-          <p className="mt-1 text-muted-foreground">Find books to add to your collection</p>
+          <h1 className="text-3xl font-bold tracking-tight">Buscar livros</h1>
+          <p className="mt-1 text-muted-foreground">Encontre livros para adicionar à sua coleção</p>
         </div>
 
         <form onSubmit={handleSearch} className="flex gap-2">
@@ -115,14 +115,14 @@ export default function SearchPage() {
             <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search by title, author, or genre..."
+              placeholder="Pesquise por título, autor ou gênero..."
               className="pl-8"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <Button type="submit" disabled={isSearching}>
-            {isSearching ? 'Searching...' : 'Search'}
+            {isSearching ? 'Buscando...' : 'Buscar'}
           </Button>
         </form>
 
@@ -187,27 +187,27 @@ export default function SearchPage() {
 
                   <div className="mt-4 grid grid-cols-2 gap-2">
                     <Button variant="outline" size="sm" asChild>
-                      <Link href={`/dashboard/book/${book.id}`}>View Details</Link>
+                      <Link href={`/dashboard/book/${book.id}`}>Ver detalhes</Link>
                     </Button>
 
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button size="sm">
-                          {book.status ? 'Change Status' : 'Add to Library'}
+                          {book.status ? 'Mudar status' : 'Lista de desejo'}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-[200px]">
                         <DropdownMenuItem onClick={() => updateBookStatus(book.id, 'want-to-read')}>
                           <BookMarked className="mr-2 h-4 w-4" />
-                          <span>Want to Read</span>
+                          <span>Lista de desejo</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => updateBookStatus(book.id, 'reading')}>
                           <BookOpen className="mr-2 h-4 w-4" />
-                          <span>Currently Reading</span>
+                          <span>Lendo</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => updateBookStatus(book.id, 'read')}>
                           <BookText className="mr-2 h-4 w-4" />
-                          <span>Read</span>
+                          <span>Lido</span>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -222,11 +222,11 @@ export default function SearchPage() {
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                 <SearchIcon className="h-10 w-10 text-muted-foreground" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold">No books found</h3>
+              <h3 className="mt-4 text-lg font-semibold">Nenhum livro encontrado</h3>
               <p className="mt-2 text-sm text-muted-foreground">
                 {searchQuery
-                  ? 'Try searching with different keywords'
-                  : 'Search for books by title, author, or genre'}
+                  ? 'Tente pesquisar com palavras-chave diferentes'
+                  : 'Pesquise livros por título, autor ou gênero'}
               </p>
             </div>
           </div>

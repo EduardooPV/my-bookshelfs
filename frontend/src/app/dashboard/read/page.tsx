@@ -62,14 +62,10 @@ export default function Read() {
         <div className="space-y-1">
           <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
             <BookText className="h-6 w-6" />
-            Read
+            Lido
           </h1>
-          <p className="text-muted-foreground">Books you&apos;ve finished reading</p>
+          <p className="text-muted-foreground">Livros que você terminou de ler</p>
         </div>
-        <Button className="gap-1">
-          <Plus className="h-4 w-4" />
-          Add Book
-        </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -90,7 +86,7 @@ export default function Read() {
                   </div>
                   <div className="mt-4 flex gap-2">
                     <Button size="sm" variant="secondary" className="w-full">
-                      View Details
+                      Ver detalhes
                     </Button>
                   </div>
                 </div>
@@ -99,20 +95,19 @@ export default function Read() {
                 <h3 className="truncate font-semibold">{book.title}</h3>
                 <p className="text-sm text-muted-foreground">{book.author}</p>
                 <div className="mt-2 flex items-center justify-between">
-                  <div className="flex">
+                  {/* <div className="flex">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={`h-4 w-4 ${
-                          i < book.rating
+                        className={`h-4 w-4 ${i < book.rating
                             ? 'fill-yellow-500 text-yellow-500'
                             : 'text-muted-foreground'
-                        }`}
+                          }`}
                       />
                     ))}
-                  </div>
+                  </div> */}
                   <span className="text-xs text-muted-foreground">
-                    {new Date(book.dateFinished).toLocaleDateString()}
+                    Finalizado em: {new Date(book.dateFinished).toLocaleDateString()}
                   </span>
                 </div>
               </div>

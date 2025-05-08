@@ -56,14 +56,10 @@ export default function WantToRead() {
         <div className="space-y-1">
           <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
             <BookMarked className="h-6 w-6" />
-            Want to Read
+            Lista de desejo
           </h1>
-          <p className="text-muted-foreground">Books you want to read in the future</p>
+          <p className="text-muted-foreground">Livros que você quer ler no futuro</p>
         </div>
-        <Button className="gap-1">
-          <Plus className="h-4 w-4" />
-          Add Book
-        </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -84,7 +80,7 @@ export default function WantToRead() {
                   </div>
                   <div className="mt-4 flex gap-2">
                     <Button size="sm" variant="secondary" className="w-full">
-                      Start Reading
+                      Começar a ler
                     </Button>
                   </div>
                 </div>
@@ -93,7 +89,7 @@ export default function WantToRead() {
                 <h3 className="truncate font-semibold">{book.title}</h3>
                 <p className="text-sm text-muted-foreground">{book.author}</p>
                 <div className="mt-2 flex items-center text-sm text-muted-foreground">
-                  <span>Added on {new Date(book.addedDate).toLocaleDateString()}</span>
+                  <span>Adicionado em: {new Date(book.addedDate).toLocaleDateString()}</span>
                 </div>
               </div>
             </CardContent>
