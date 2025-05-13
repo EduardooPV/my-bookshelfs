@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import { router as bookRoutes } from './book';
+import { router as bookRoutes } from './book-router';
 import {
   getAllBooksController,
   getBookControler,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -5,9 +6,11 @@ import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import { router as authRouter } from './routes/auth';
 import { router as bookRouter } from './routes/book';
+import { router as userRouter } from './routes/user';
 import { app } from './app';
 import { authMiddleware } from './middleware/auth-middleware';
 import { requestLogger } from './middleware/request-logger-middleware';
+import cookieParser from 'cookie-parser';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
@@ -16,7 +19,7 @@ const corsOptions = cors({
     if (
       !origin ||
       origin.startsWith('https://my-bookshelfs-frontend') ||
-      'http://localhost:3000'
+      origin === 'http://localhost:3000'
     ) {
       callback(null, true);
     } else {
@@ -46,8 +49,10 @@ app.use(rateLimitOptions);
 app.use(helmetOptions);
 app.use(hpp());
 app.use(requestLogger);
+app.use(cookieParser());
 
 app.use('/auth', authRouter);
 app.use('/book', authMiddleware, bookRouter);
+app.use('/user', authMiddleware, userRouter);
 
 export default app;
