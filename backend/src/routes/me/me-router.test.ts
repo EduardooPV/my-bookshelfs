@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express from 'express';
-import { router as userRoutes } from './user-router';
-import { getReadingBookController } from '../../controllers/user';
+import { router as userRoutes } from './me-router';
+import { getBooksStatusController } from '../../controllers/me';
 
 jest.mock('../../controllers/user', () => ({
   getReadingBookController: jest.fn((req, res) =>
@@ -18,7 +18,6 @@ describe('User Routes', () => {
     const response = await request(app).get('/user/reading');
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: 'Get Reading Books Success' });
-    expect(getReadingBookController).toHaveBeenCalled();
+    expect(getBooksStatusController).toHaveBeenCalled();
   });
 });
-  

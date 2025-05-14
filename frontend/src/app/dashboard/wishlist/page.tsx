@@ -6,7 +6,7 @@ import { BookMarked, LoaderCircleIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getWishlistBooks, IWishlistBooks } from '../../../services/list-wishlist';
-import { startReadingBook } from '../../../services/start-reading';
+import { changeStatusBook } from '../../../services/change-status-book';
 
 export default function WantToRead() {
   const [loading, setLoading] = useState(true);
@@ -29,9 +29,9 @@ export default function WantToRead() {
     try {
       setLoadingStartReading(true);
 
-      const startReadingBookResponse = await startReadingBook(bookId);
+      const changeStatusBookResponse = await changeStatusBook(bookId, 'reading');
 
-      if (startReadingBookResponse) {
+      if (changeStatusBookResponse) {
         fetchData();
       }
     } catch (error) {

@@ -1,4 +1,4 @@
-export interface IStartReadingBook {
+export interface IChangeStatusBook {
   id: string;
   user_id: string;
   book_id: string;

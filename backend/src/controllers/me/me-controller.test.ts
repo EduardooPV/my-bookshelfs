@@ -1,5 +1,5 @@
-import { getReadingBookController } from './user-controller';
-import { getReadingBooksService } from '../../services/user';
+import { getReadingBookController } from './me-controller';
+import { getReadingBooksService } from '../../services/me';
 import { mockRequest, mockResponse } from '../../__mocks__/controllers/user';
 
 jest.mock('../../services/user', () => ({

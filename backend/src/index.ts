@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import { router as authRouter } from './routes/auth';
 import { router as bookRouter } from './routes/book';
-import { router as userRouter } from './routes/user';
+import { router as meRouter } from './routes/me';
 import { app } from './app';
 import { authMiddleware } from './middleware/auth-middleware';
 import { requestLogger } from './middleware/request-logger-middleware';
@@ -53,6 +53,6 @@ app.use(cookieParser());
 
 app.use('/auth', authRouter);
 app.use('/book', authMiddleware, bookRouter);
-app.use('/user', authMiddleware, userRouter);
+app.use('/me', authMiddleware, meRouter);
 
 export default app;
