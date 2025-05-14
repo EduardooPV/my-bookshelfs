@@ -48,7 +48,7 @@ const readingBookController = async (
     if (userId) {
       const book = await readingBookService(bookId, userId);
 
-      res.status(201).json({ book });
+      res.status(201).json(book);
     }
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });

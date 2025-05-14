@@ -69,7 +69,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const navigation = [
     { name: 'Inicio', href: '/dashboard', icon: Home },
-    { name: 'Lista de desejo', href: '/dashboard/want-to-read', icon: BookMarked },
+    { name: 'Lista de desejo', href: '/dashboard/wishlist', icon: BookMarked },
     { name: 'Lendo Atualmente', href: '/dashboard/reading', icon: BookOpen },
     { name: 'Lido', href: '/dashboard/read', icon: BookText },
     { name: 'Pesquisar', href: '/dashboard/search', icon: Search },

@@ -1,7 +1,13 @@
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BookOpen, BookMarked, BookText, Plus, TrendingUp } from 'lucide-react';
+import { BookOpen, BookMarked, BookText, Plus, TrendingUp, LoaderCircleIcon } from 'lucide-react';
 import Image from 'next/image';
+import { getSumReadingBooks, ISumReadingBooks } from '../../services/sum-reading';
+import { useEffect, useState } from 'react';
+import { getSumWishlistBooks, ISumWishlistBooks } from '../../services/sum-wishlist';
+import { getSumDoneBooks, ISumDoneBooks } from '../../services/sum-done';
 
 export default function Dashboard() {
   // Sample data for recently added books
@@ -29,6 +35,30 @@ export default function Dashboard() {
     },
   ];
 
+  const [loading, setLoading] = useState(true);
+  const [sumReadingBooks, setSumReadingBooks] = useState<ISumReadingBooks | null>(null);
+  const [sumWishlistBooks, setSumWishlistBooks] = useState<ISumWishlistBooks | null>(null);
+  const [sumDoneBooks, setSumDoneBooks] = useState<ISumDoneBooks | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [sumReadingBooksResponse, sumWishlistBooksResponse, sumDoneBooksResponse] =
+          await Promise.all([getSumReadingBooks(), getSumWishlistBooks(), getSumDoneBooks()]);
+        setSumReadingBooks(sumReadingBooksResponse);
+        setSumWishlistBooks(sumWishlistBooksResponse);
+        setSumDoneBooks(sumDoneBooksResponse);
+      } catch (error) {
+        console.error('Erro ao buscar a soma dos livros lidos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -46,7 +76,17 @@ export default function Dashboard() {
             <BookMarked className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="h-10">
+              {loading ? (
+                <div className="flex h-full items-center">
+                  <span className="animate-spin">
+                    <LoaderCircleIcon />
+                  </span>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold">{sumWishlistBooks?.total}</div>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground">Livros na sua lista de leitura</p>
           </CardContent>
         </Card>
@@ -56,7 +96,17 @@ export default function Dashboard() {
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3</div>
+            <div className="h-10">
+              {loading ? (
+                <div className="flex h-full items-center">
+                  <span className="animate-spin">
+                    <LoaderCircleIcon />
+                  </span>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold">{sumReadingBooks?.total}</div>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground">Livros em progresso</p>
           </CardContent>
         </Card>
@@ -66,7 +116,17 @@ export default function Dashboard() {
             <BookText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">28</div>
+            <div className="h-10">
+              {loading ? (
+                <div className="flex h-full items-center">
+                  <span className="animate-spin">
+                    <LoaderCircleIcon />
+                  </span>
+                </div>
+              ) : (
+                <div className="text-2xl font-bold">{sumDoneBooks?.total}</div>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground">Livros concluídos</p>
           </CardContent>
         </Card>
