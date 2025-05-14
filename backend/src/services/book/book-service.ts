@@ -101,6 +101,7 @@ const changeStatusBookService = async (
         status,
         start_at: status === 'reading' ? new Date() : null,
         completion_at: status === 'done' ? new Date() : null,
+        updated_at: new Date(),
       })
       .eq('book_id', bookId)
       .eq('user_id', userId)
@@ -127,6 +128,7 @@ const changeStatusBookService = async (
         status,
         start_at: status === 'reading' ? new Date() : null,
         completion_at: status === 'done' ? new Date() : null,
+        updated_at: new Date(),
       },
     ])
     .select();

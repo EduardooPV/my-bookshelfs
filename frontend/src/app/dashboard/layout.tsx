@@ -38,7 +38,8 @@ import {
   SheetTrigger,
   SheetHeader,
 } from '@/components/ui/sheet';
-import { useUserAuth } from '../../hooks/use-user-auth';
+import { useUserAuth } from '@/hooks/use-user-auth';
+import { ACTIVE_SEARCH } from '../../utils/features-flags';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -72,7 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: 'Lista de desejo', href: '/dashboard/wishlist', icon: BookMarked },
     { name: 'Lendo Atualmente', href: '/dashboard/reading', icon: BookOpen },
     { name: 'Lido', href: '/dashboard/read', icon: BookText },
-    { name: 'Pesquisar', href: '/dashboard/search', icon: Search },
+    ...(ACTIVE_SEARCH ? [{ name: 'Pesquisar', href: '/dashboard/search', icon: Search }] : []),
   ];
 
   const Sidebar = () => (
@@ -92,10 +93,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${isActive
+                className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
+                  isActive
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                  }`}
+                }`}
               >
                 <item.icon className="h-4 w-4" />
                 {item.name}
@@ -103,12 +105,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             );
           })}
         </nav>
-      </div>
-      <div className="mt-auto p-4">
-        <Button className="w-full gap-1" onClick={() => { }}>
-          <PlusCircle className="h-4 w-4" />
-          Adicionar livro
-        </Button>
       </div>
     </div>
   );
@@ -119,7 +115,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      {/* Desktop sidebar */}
       {!isMobile && (
         <div className="hidden border-r md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
           <Sidebar />
@@ -128,7 +123,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main content */}
       <div className="flex flex-1 flex-col md:pl-64">
-        <header className="sticky top-0 z-10 mb-10 flex h-16 items-center justify-between gap-4 bg-background px-4 md:px-6">
+        <header className="sticky top-0 z-10 mb-4 flex h-16 items-center justify-between gap-4 bg-background px-4 md:px-6">
           {/* Mobile sidebar */}
           {isMobile && (
             <Sheet>
@@ -149,7 +144,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
 
           {/* Verificar se estou na página /dashboard/search, se sim não renderizar esse componente, se não, renderizar. */}
-          {pathname !== '/dashboard/search' ? (
+          {pathname !== '/dashboard/search' && ACTIVE_SEARCH ? (
             <div className="w-full flex-1 md:max-w-sm">
               <div className="relative block">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

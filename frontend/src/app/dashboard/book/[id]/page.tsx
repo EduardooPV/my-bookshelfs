@@ -5,18 +5,14 @@ import { CardFooter } from '@/components/ui/card';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
 import {
   BookOpen,
   BookText,
   BookMarked,
-  Star,
   Calendar,
   User,
   Tag,
   ArrowLeft,
-  Edit,
-  Share,
   Check,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -27,10 +23,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 export default function BookDetail({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState('details');
-  const [review, setReview] = useState('');
   const [bookStatus, setBookStatus] = useState('read');
 
-  // This would normally be fetched from an API based on the ID
   const book = {
     id: params.id,
     title: 'Project Hail Mary',
@@ -52,7 +46,6 @@ export default function BookDetail({ params }: { params: { id: string } }) {
 
   const handleStatusChange = (value: string) => {
     setBookStatus(value);
-    // In a real app, this would update the book status in the database
     console.log(`Book status changed to: ${value}`);
   };
 

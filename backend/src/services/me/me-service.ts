@@ -1,12 +1,13 @@
 import { supabase } from '../../config/database';
 
 const getBookStatusService = async (userId: string, status: string) => {
-  const { data, error } = await supabase
-    .from('books')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('status', status)
-    .order('start_at', { ascending: false });
+  let query = supabase.from('books').select('*').eq('user_id', userId);
+
+  if (status) {
+    query = query.eq('status', status);
+  }
+
+  const { data, error } = await query.order('updated_at', { ascending: false });
 
   if (error) {
     throw new Error(`Erro ao buscar livros: ${error.message}`);

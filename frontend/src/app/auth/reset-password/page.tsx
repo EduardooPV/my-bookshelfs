@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { BookOpen, ArrowLeft, Mail, LoaderCircleIcon } from 'lucide-react';
-import { ToggleEye } from '../../../components/common/ToggleEye';
-import { useUserAuth } from '../../../hooks/use-user-auth';
+import { BookOpen, ArrowLeft, LoaderCircleIcon } from 'lucide-react';
+import { ToggleEye } from '@/components/common/ToggleEye';
+import { useUserAuth } from '@/hooks/use-user-auth';
 
 export default function ForgotPassword() {
   const [password, setPassword] = useState('');
@@ -15,7 +15,7 @@ export default function ForgotPassword() {
 
   useEffect(() => {
     setSession();
-  }, []);
+  }, [setSession]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

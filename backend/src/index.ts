@@ -34,7 +34,7 @@ const corsOptions = cors({
 
 const rateLimitOptions = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 1000,
   message:
     'Muitas requisições vindas deste IP, por favor, tente novamente mais tarde.',
 });

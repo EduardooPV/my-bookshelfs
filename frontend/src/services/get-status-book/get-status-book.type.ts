@@ -1,4 +1,4 @@
-export interface IWishlistBooks {
+export interface IGetStatusBook {
   id: string;
   user_id: string;
   book_id: string;
@@ -9,5 +9,5 @@ export interface IWishlistBooks {
   description: string;
   start_at: string;
   completion_at: string;
-  status: string;
+  status: 'wishlist' | 'reading' | 'done';
 }

@@ -8,18 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import {
-  BookOpen,
-  ArrowLeft,
-  User,
-  Mail,
-  Lock,
-  Github,
-  ChromeIcon as Google,
-  LoaderCircleIcon,
-} from 'lucide-react';
-import { ToggleEye } from '../../../components/common/ToggleEye';
-import { useUserAuth } from '../../../hooks/use-user-auth';
+import { BookOpen, ArrowLeft, Mail, LoaderCircleIcon } from 'lucide-react';
+import { ToggleEye } from '@/components/common/ToggleEye';
+import { useUserAuth } from '@/hooks/use-user-auth';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
