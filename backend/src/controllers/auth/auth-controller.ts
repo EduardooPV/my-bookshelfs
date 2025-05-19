@@ -25,6 +25,15 @@ const signInController = async (req: Request, res: Response) => {
   try {
     const session = await signIn(email, password);
 
+    const accessToken = session?.access_token;
+
+    res.cookie('access_token', accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+    });
+
     res.status(200).json({ session });
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
