@@ -103,7 +103,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className=" mx-auto max-w-6xl">
+    <div className="mx-auto max-w-6xl">
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Buscar livros</h1>

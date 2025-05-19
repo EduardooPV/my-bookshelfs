@@ -1,23 +1,36 @@
 import request from 'supertest';
 import express from 'express';
-import { router as userRoutes } from './me-router';
-import { getBooksStatusController } from '../../controllers/me';
+import { router as meRoutes } from './me-router';
+import {
+  getBooksStatusController,
+  getCountBooksStatusController,
+} from '../../controllers/me';
 
-jest.mock('../../controllers/user', () => ({
-  getReadingBookController: jest.fn((req, res) =>
-    res.status(200).json({ message: 'Get Reading Books Success' }),
+jest.mock('../../controllers/me', () => ({
+  getBooksStatusController: jest.fn((req, res) =>
+    res.status(200).json({ message: 'Get Books Status Success' }),
+  ),
+  getCountBooksStatusController: jest.fn((req, res) =>
+    res.status(200).json({ count: 2 }),
   ),
 }));
 
 const app = express();
 app.use(express.json());
-app.use('/user', userRoutes);
+app.use('/me', meRoutes);
 
-describe('User Routes', () => {
-  it('GET /user/reading should call getReadingBookController', async () => {
-    const response = await request(app).get('/user/reading');
+describe('Me Routes', () => {
+  it('GET /me/books should call getBooksStatusController', async () => {
+    const response = await request(app).get('/me/books');
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: 'Get Reading Books Success' });
+    expect(response.body).toEqual({ message: 'Get Books Status Success' });
     expect(getBooksStatusController).toHaveBeenCalled();
+  });
+
+  it('GET /me/books/count should call getCountBooksStatusController', async () => {
+    const response = await request(app).get('/me/books/count');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ count: 2 });
+    expect(getCountBooksStatusController).toHaveBeenCalled();
   });
 });

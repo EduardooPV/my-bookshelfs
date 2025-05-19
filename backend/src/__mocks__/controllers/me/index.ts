@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 export const mockRequest = {
   userId: 'user123',
+  query: { status: 'reading' },
 } as unknown as Request;
 
 export const mockResponse = {

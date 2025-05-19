@@ -13,7 +13,6 @@ import {
   BookText,
   Search,
   Home,
-  PlusCircle,
   Settings,
   LogOut,
   Moon,

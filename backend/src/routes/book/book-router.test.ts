@@ -4,10 +4,8 @@ import { router as bookRoutes } from './book-router';
 import {
   getAllBooksController,
   getBookControler,
-  readingBookController,
-  doneBookController,
-  wishlistBookController,
   deleteBookController,
+  changeStatusBookController,
 } from '../../controllers/book';
 
 jest.mock('../../controllers/book', () => ({
@@ -17,14 +15,8 @@ jest.mock('../../controllers/book', () => ({
   getBookControler: jest.fn((req, res) =>
     res.status(200).json({ message: 'Get Book Success' }),
   ),
-  readingBookController: jest.fn((req, res) =>
+  changeStatusBookController: jest.fn((req, res) =>
     res.status(201).json({ message: 'Reading Book Success' }),
-  ),
-  doneBookController: jest.fn((req, res) =>
-    res.status(201).json({ message: 'Done Book Success' }),
-  ),
-  wishlistBookController: jest.fn((req, res) =>
-    res.status(201).json({ message: 'Wishlist Book Success' }),
   ),
   deleteBookController: jest.fn((req, res) =>
     res.status(201).json({ message: 'Delete Book Success' }),
@@ -50,25 +42,13 @@ describe('Book Routes', () => {
     expect(getBookControler).toHaveBeenCalled();
   });
 
-  it('POST /book/:bookId/reading should call readingBookController', async () => {
-    const response = await request(app).post('/book/1/reading');
+  it('POST /book/:bookId/status should call changeStatusBookController', async () => {
+    const response = await request(app)
+      .post('/book/1/status')
+      .send({ status: 'reading' });
     expect(response.status).toBe(201);
     expect(response.body).toEqual({ message: 'Reading Book Success' });
-    expect(readingBookController).toHaveBeenCalled();
-  });
-
-  it('POST /book/:bookId/done should call doneBookController', async () => {
-    const response = await request(app).post('/book/1/done');
-    expect(response.status).toBe(201);
-    expect(response.body).toEqual({ message: 'Done Book Success' });
-    expect(doneBookController).toHaveBeenCalled();
-  });
-
-  it('POST /book/:bookId/wishlist should call wishlistBookController', async () => {
-    const response = await request(app).post('/book/1/wishlist');
-    expect(response.status).toBe(201);
-    expect(response.body).toEqual({ message: 'Wishlist Book Success' });
-    expect(wishlistBookController).toHaveBeenCalled();
+    expect(changeStatusBookController).toHaveBeenCalled();
   });
 
   it('DELETE /book/:bookId should call deleteBookController', async () => {

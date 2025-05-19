@@ -1,8 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { BookOpen, BookMarked, BookText, Plus, LoaderCircleIcon } from 'lucide-react';
+import { BookOpen, BookMarked, BookText, LoaderCircleIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getCountStatusBooks, ICountStatusBook } from '@/services/count-status-book';
