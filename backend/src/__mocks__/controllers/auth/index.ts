@@ -11,6 +11,7 @@ const mockRequest = {
 const mockResponse = {
   status: jest.fn().mockReturnThis(),
   json: jest.fn(),
+  cookie: jest.fn(),
 } as unknown as Response;
 
 export {
