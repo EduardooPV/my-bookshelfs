@@ -51,6 +51,8 @@ app.use(hpp());
 app.use(requestLogger);
 app.use(cookieParser());
 
+app.set('trust proxy', 1);
+
 app.use('/auth', authRouter);
 app.use('/book', authMiddleware, bookRouter);
 app.use('/me', authMiddleware, meRouter);
