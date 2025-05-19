@@ -7,20 +7,19 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   BookOpen,
   BookMarked,
   BookText,
   Search,
   Home,
-  PlusCircle,
-  Bell,
   Settings,
   LogOut,
   Moon,
   Sun,
   Menu,
+  Computer,
+  User,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -30,15 +29,29 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from 'next-themes';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  SheetDescription,
+  SheetTitle,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+} from '@/components/ui/sheet';
+import { useUserAuth } from '@/hooks/use-user-auth';
+import { ACTIVE_SEARCH } from '../../utils/features-flags';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [search, setSearch] = useState('');
+  const { logout } = useUserAuth();
 
-  // After mounting, we can safely show the UI
+  const handleLogout = async () => {
+    await logout();
+  };
+
   useEffect(() => {
     setMounted(true);
 
@@ -55,23 +68,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, []);
 
   const navigation = [
-    { name: 'Home', href: '/dashboard', icon: Home },
-    { name: 'Want to Read', href: '/dashboard/want-to-read', icon: BookMarked },
-    { name: 'Currently Reading', href: '/dashboard/reading', icon: BookOpen },
-    { name: 'Read', href: '/dashboard/read', icon: BookText },
-    { name: 'Search', href: '/search', icon: Search },
+    { name: 'Inicio', href: '/dashboard', icon: Home },
+    { name: 'Lista de desejo', href: '/dashboard/wishlist', icon: BookMarked },
+    { name: 'Lendo Atualmente', href: '/dashboard/reading', icon: BookOpen },
+    { name: 'Lido', href: '/dashboard/read', icon: BookText },
+    ...(ACTIVE_SEARCH ? [{ name: 'Pesquisar', href: '/dashboard/search', icon: Search }] : []),
   ];
 
   const Sidebar = () => (
     <div className="flex h-full flex-col gap-2">
-      <div className="flex h-14 items-center border-b px-4">
+      <div className="flex h-12 items-center border-b px-4 md:h-16">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <BookOpen className="h-6 w-6" />
-          <span>BookTracker</span>
+          <p>My bookshelfs</p>
         </Link>
       </div>
       <div className="flex-1 overflow-auto py-2">
-        <nav className="grid items-start px-2 text-sm font-medium">
+        <nav className="grid items-start gap-2 px-2 text-sm font-medium">
           {navigation.map((item) => {
             const isActive = pathname === item.href;
 
@@ -79,7 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all ${
                   isActive
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -92,12 +105,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           })}
         </nav>
       </div>
-      <div className="mt-auto p-4">
-        <Button className="w-full gap-1" onClick={() => {}}>
-          <PlusCircle className="h-4 w-4" />
-          Add Book
-        </Button>
-      </div>
     </div>
   );
 
@@ -107,22 +114,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      {/* Mobile sidebar */}
-      {isMobile && (
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="fixed left-4 top-4 z-40 md:hidden">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-64 p-0">
-            <Sidebar />
-          </SheetContent>
-        </Sheet>
-      )}
-
-      {/* Desktop sidebar */}
       {!isMobile && (
         <div className="hidden border-r md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
           <Sidebar />
@@ -131,69 +122,83 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main content */}
       <div className="flex flex-1 flex-col md:pl-64">
-        <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-          <div className="w-full flex-1 md:max-w-sm">
-            <Link href="/search" className="relative block">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search books..."
-                className="w-full rounded-lg bg-background pl-8 md:w-[300px] lg:w-[400px]"
-                readOnly
-                onClick={(e) => e.preventDefault()}
-              />
-            </Link>
-          </div>
+        <header className="sticky top-0 z-10 mb-4 flex h-16 items-center justify-between gap-4 bg-background px-4 md:px-6">
+          {/* Mobile sidebar */}
+          {isMobile && (
+            <Sheet>
+              <SheetHeader className="sr-only">
+                <SheetTitle>Sidebar</SheetTitle>
+                <SheetDescription>Sidebar</SheetDescription>
+              </SheetHeader>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon" className="z-40 md:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-64 p-0">
+                <Sidebar />
+              </SheetContent>
+            </Sheet>
+          )}
+
+          {/* Verificar se estou na página /dashboard/search, se sim não renderizar esse componente, se não, renderizar. */}
+          {pathname !== '/dashboard/search' && ACTIVE_SEARCH ? (
+            <div className="w-full flex-1 md:max-w-sm">
+              <div className="relative block">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Procurar livros..."
+                  className="leading-0 w-full rounded-lg bg-background pl-8 md:w-full lg:w-[400px]"
+                  onChange={(e) => setSearch(e.currentTarget.value)}
+                  value={search}
+                />
+              </div>
+            </div>
+          ) : (
+            <div />
+          )}
+
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
-                3
-              </span>
-              <span className="sr-only">Notifications</span>
-            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
                   {theme === 'dark' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-                  <span className="sr-only">Toggle theme</span>
+                  <span className="sr-only">Trocar tema</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setTheme('light')}>
                   <Sun className="mr-2 h-4 w-4" />
-                  <span>Light</span>
+                  <span>Claro</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('dark')}>
                   <Moon className="mr-2 h-4 w-4" />
-                  <span>Dark</span>
+                  <span>Escuro</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme('system')}>
-                  <span>System</span>
+                  <Computer className="mr-2 h-4 w-4" />
+                  <span>Sistema</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/placeholder-user.jpg" alt="User" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
+                <Button variant="ghost" size="icon">
+                  <Settings className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleLogout()}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <span>Sair</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

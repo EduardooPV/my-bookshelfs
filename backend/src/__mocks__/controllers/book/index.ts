@@ -21,6 +21,7 @@ const mockRequest = {
   query: { search: '', page: '1', limit: '10' },
   params: { bookId: '1' },
   userId: 'user123',
+  body: { status: 'reading' },
 } as unknown as Request;
 
 const mockResponse = {

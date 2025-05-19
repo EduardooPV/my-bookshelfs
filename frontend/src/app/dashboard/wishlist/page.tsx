@@ -2,23 +2,22 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { BookText, LoaderCircleIcon } from 'lucide-react';
+import { BookMarked, LoaderCircleIcon } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useBooksByStatus } from '@/hooks/use-books-by-status';
 
-export default function Read() {
-  const { books, loading } = useBooksByStatus('done');
+export default function WantToRead() {
+  const { books, loading, actionLoading, updateBookStatus } = useBooksByStatus('wishlist');
 
   return (
     <div className="flex h-full flex-col space-y-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h1 className="flex items-center gap-2 text-3xl font-bold tracking-tight">
-            <BookText className="h-6 w-6" />
-            Lido
+            <BookMarked className="h-6 w-6" />
+            Lista de desejo
           </h1>
-          <p className="text-muted-foreground">Livros que você terminou de ler</p>
+          <p className="text-muted-foreground">Livros que você quer ler no futuro</p>
         </div>
       </div>
 
@@ -33,7 +32,7 @@ export default function Read() {
 
         {books?.length === 0 ? (
           <div className="flex h-full w-full items-center justify-center">
-            <p className="text-muted-foreground">Nenhum livro na lista de lidos...</p>
+            <p className="text-muted-foreground">Nenhum livro na lista de desejos...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -52,11 +51,15 @@ export default function Read() {
                         <Button
                           size="sm"
                           variant="secondary"
-                          className="flex w-full items-center justify-center"
+                          className="w-full"
+                          onClick={() => updateBookStatus(book.book_id, 'reading')}
+                          disabled={!!actionLoading}
                         >
-                          <Link className="flex-1" href={`/dashboard/book/${book.id}`}>
-                            Ver detalhes
-                          </Link>
+                          {!!actionLoading ? (
+                            <LoaderCircleIcon className="animate-spin" />
+                          ) : (
+                            'Começar a ler'
+                          )}
                         </Button>
                       </div>
                     </div>
@@ -64,10 +67,8 @@ export default function Read() {
                   <div className="p-4">
                     <h3 className="truncate font-semibold">{book.title}</h3>
                     <p className="text-sm text-muted-foreground">{book.author}</p>
-                    <div className="mt-2 flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">
-                        Finalizado em: {new Date(book.completion_at).toLocaleDateString()}
-                      </span>
+                    <div className="mt-2 flex items-center text-sm text-muted-foreground">
+                      <span>Adicionado em: {new Date(book.updated_at).toLocaleDateString()}</span>
                     </div>
                   </div>
                 </CardContent>

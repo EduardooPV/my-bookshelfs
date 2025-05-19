@@ -3,11 +3,21 @@ import {
   getAllBooksService,
   getBookService,
   deleteBookService,
-  readingBookService,
-  doneBookService,
-  wishlistBookService,
+  changeStatusBookService,
 } from '../../services/book';
 import { AuthenticatedRequest } from '../../middleware/auth-middleware';
+
+const getBookControler = async (req: Request, res: Response) => {
+  try {
+    const { bookId } = req.params;
+
+    const book = await getBookService(bookId);
+
+    res.status(200).json({ book });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
 
 const getAllBooksController = async (req: Request, res: Response) => {
   try {
@@ -25,63 +35,19 @@ const getAllBooksController = async (req: Request, res: Response) => {
   }
 };
 
-const getBookControler = async (req: Request, res: Response) => {
-  try {
-    const { bookId } = req.params;
-
-    const book = await getBookService(bookId);
-
-    res.status(200).json({ book });
-  } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
-  }
-};
-
-const readingBookController = async (
+const changeStatusBookController = async (
   req: AuthenticatedRequest,
   res: Response,
 ) => {
   try {
     const { bookId } = req.params;
     const userId = req.userId;
+    const { status } = req.body;
 
     if (userId) {
-      const book = await readingBookService(bookId, userId);
+      const book = await changeStatusBookService(bookId, userId, status);
 
-      res.status(201).json({ book });
-    }
-  } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
-  }
-};
-
-const doneBookController = async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const { bookId } = req.params;
-    const userId = req.userId;
-
-    if (userId) {
-      const book = await doneBookService(bookId, userId);
-
-      res.status(201).json({ book });
-    }
-  } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
-  }
-};
-
-const wishlistBookController = async (
-  req: AuthenticatedRequest,
-  res: Response,
-) => {
-  try {
-    const { bookId } = req.params;
-    const userId = req.userId;
-
-    if (userId) {
-      const book = await wishlistBookService(bookId, userId);
-
-      res.status(201).json({ book });
+      res.status(201).json(book);
     }
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
@@ -107,10 +73,8 @@ const deleteBookController = async (
 };
 
 export {
-  getAllBooksController,
   getBookControler,
-  readingBookController,
-  doneBookController,
-  wishlistBookController,
+  getAllBooksController,
+  changeStatusBookController,
   deleteBookController,
 };

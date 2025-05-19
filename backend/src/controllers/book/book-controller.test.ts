@@ -1,17 +1,13 @@
 import {
   getAllBooksController,
   getBookControler,
-  readingBookController,
-  doneBookController,
-  wishlistBookController,
+  changeStatusBookController,
   deleteBookController,
 } from './book-controller';
 import {
   getAllBooksService,
   getBookService,
-  readingBookService,
-  doneBookService,
-  wishlistBookService,
+  changeStatusBookService,
   deleteBookService,
 } from '../../services/book';
 import {
@@ -24,13 +20,15 @@ import {
 jest.mock('../../services/book', () => ({
   getAllBooksService: jest.fn(),
   getBookService: jest.fn(),
-  readingBookService: jest.fn(),
-  doneBookService: jest.fn(),
-  wishlistBookService: jest.fn(),
+  changeStatusBookService: jest.fn(),
   deleteBookService: jest.fn(),
 }));
 
 describe('Book Controller', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('getAllBooksController', () => {
     it('should return a list of books with status 200', async () => {
       (getAllBooksService as jest.Mock).mockResolvedValue(mockBooks);
@@ -81,77 +79,30 @@ describe('Book Controller', () => {
     });
   });
 
-  describe('readingBookController', () => {
-    it('should mark a book as reading with status 201', async () => {
-      (readingBookService as jest.Mock).mockResolvedValue(mockBook);
+  describe('changeStatusBookController', () => {
+    it('should change book status with status 201', async () => {
+      (changeStatusBookService as jest.Mock).mockResolvedValue(undefined);
 
-      await readingBookController(mockRequest, mockResponse);
+      await changeStatusBookController(mockRequest, mockResponse);
 
-      expect(readingBookService).toHaveBeenCalledWith('1', 'user123');
+      expect(changeStatusBookService).toHaveBeenCalledWith(
+        '1',
+        'user123',
+        'reading',
+      );
       expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith({ book: mockBook });
     });
 
     it('should return error with status 400 if service failed', async () => {
-      (readingBookService as jest.Mock).mockRejectedValue(
-        new Error('Erro ao marcar como lendo'),
+      (changeStatusBookService as jest.Mock).mockRejectedValue(
+        new Error('Erro ao atualizar livro'),
       );
 
-      await readingBookController(mockRequest, mockResponse);
+      await changeStatusBookController(mockRequest, mockResponse);
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Erro ao marcar como lendo',
-      });
-    });
-  });
-
-  describe('doneBookController', () => {
-    it('should mark a book as done with status 201', async () => {
-      (doneBookService as jest.Mock).mockResolvedValue(mockBook);
-
-      await doneBookController(mockRequest, mockResponse);
-
-      expect(doneBookService).toHaveBeenCalledWith('1', 'user123');
-      expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith({ book: mockBook });
-    });
-
-    it('should return error with status 400 if service failed', async () => {
-      (doneBookService as jest.Mock).mockRejectedValue(
-        new Error('Erro ao marcar como concluído'),
-      );
-
-      await doneBookController(mockRequest, mockResponse);
-
-      expect(mockResponse.status).toHaveBeenCalledWith(400);
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Erro ao marcar como concluído',
-      });
-    });
-  });
-
-  describe('wishlistBookController', () => {
-    it('should add a book to wishlist with status 201', async () => {
-      (wishlistBookService as jest.Mock).mockResolvedValue(mockBook);
-
-      await wishlistBookController(mockRequest, mockResponse);
-
-      expect(wishlistBookService).toHaveBeenCalledWith('1', 'user123');
-      expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith({ book: mockBook });
-    });
-
-    it('should return error with status 400 if service failed', async () => {
-      (wishlistBookService as jest.Mock).mockRejectedValue(
-        new Error('Erro ao adicionar à lista de desejos'),
-      );
-
-      await wishlistBookController(mockRequest, mockResponse);
-
-      expect(mockResponse.status).toHaveBeenCalledWith(400);
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Erro ao adicionar à lista de desejos',
+        error: 'Erro ao atualizar livro',
       });
     });
   });

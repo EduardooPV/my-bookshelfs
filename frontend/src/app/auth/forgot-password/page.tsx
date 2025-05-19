@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BookOpen, ArrowLeft, Mail, LoaderCircleIcon } from 'lucide-react';
-import { useUserAuth } from '../../../hooks/use-user-auth';
+import { useUserAuth } from '@/hooks/use-user-auth';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
