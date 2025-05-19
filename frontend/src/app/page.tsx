@@ -9,7 +9,7 @@ export default function Home() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2 font-semibold">
             <BookOpen className="h-6 w-6" />
-            <span className="text-xl">My bookshelfs</span>
+            <span className="hidden text-xl md:block">My bookshelfs</span>
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/auth/signin">
@@ -45,10 +45,10 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-center justify-center">
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   <div className="flex flex-col items-center gap-2 rounded-lg bg-muted p-4 md:p-6">
                     <BookMarked className="h-10 w-10 text-primary" />
-                    <h3 className="text-xl font-bold">Lista de desejo</h3>
+                    <h3 className="text-center text-xl font-bold">Lista de desejo</h3>
                     <p className="text-center text-sm text-muted-foreground">
                       Acompanhe os livros que você deseja ler no futuro.
                     </p>

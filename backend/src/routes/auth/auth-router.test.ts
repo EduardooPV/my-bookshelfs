@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import { router as authRoutes } from './auth';
+import { router as authRoutes } from './auth-router';
 import {
   signUpController,
   signInController,
