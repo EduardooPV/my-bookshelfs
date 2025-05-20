@@ -10,7 +10,7 @@ export const httpService = async (endpoint: string, options: RequestInit = {}) =
     credentials: 'include',
   });
 
-  console.log('response http service1', response);
+  const data = await response.json(); // lê o corpo só uma vez
 
   if (response.status === 401) {
     toast({
@@ -22,11 +22,9 @@ export const httpService = async (endpoint: string, options: RequestInit = {}) =
   }
 
   if (!response.ok) {
-    const error = await response.json();
-
-    throw new Error(error.error || 'Erro ao buscar dados');
+    throw new Error(data.error || 'Erro ao buscar dados');
   }
 
-  console.log('response http service2', await response.json());
-  return await response.json();
+  console.log('response http service2', data);
+  return data;
 };

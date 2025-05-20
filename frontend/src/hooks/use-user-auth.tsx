@@ -63,6 +63,7 @@ export function useUserAuth() {
       console.log('response hooks2', response);
       router.push('/dashboard');
     } catch (err: any) {
+      console.log(err);
       const message = mapSupabaseError(err.error ?? err);
       toast({
         variant: 'error',
