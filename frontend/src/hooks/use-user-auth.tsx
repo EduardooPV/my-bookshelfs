@@ -54,12 +54,13 @@ export function useUserAuth() {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log('response hooks', response);
+      console.log('response hooks1', response);
 
-      if (!response?.session?.access_token) {
+      if (!response.session.access_token) {
         throw new Error('Falha ao realizar login.');
       }
 
+      console.log('response hooks2', response);
       router.push('/dashboard');
     } catch (err: any) {
       const message = mapSupabaseError(err.error ?? err);
