@@ -10,7 +10,7 @@ export const httpService = async (endpoint: string, options: RequestInit = {}) =
     credentials: 'include',
   });
 
-  console.log('response http service', response);
+  console.log('response http service1', response);
 
   if (response.status === 401) {
     toast({
@@ -27,5 +27,6 @@ export const httpService = async (endpoint: string, options: RequestInit = {}) =
     throw new Error(error.error || 'Erro ao buscar dados');
   }
 
-  return response.json();
+  console.log('response http service2', await response.json());
+  return await response.json();
 };
