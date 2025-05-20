@@ -49,10 +49,14 @@ export function useUserAuth() {
     try {
       setLoading(true);
 
-      await httpService('/auth/signin', {
+      const response = await httpService('/auth/signin', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
+
+      if (!response?.session?.access_token) {
+        throw new Error('Falha ao realizar login.');
+      }
 
       router.push('/dashboard');
     } catch (err: any) {
