@@ -49,7 +49,7 @@ export function useUserAuth() {
     try {
       setLoading(true);
 
-      const response = await fetch('/api/auth/signin', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         headers: {
