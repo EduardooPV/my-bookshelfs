@@ -25,6 +25,5 @@ export const httpService = async (endpoint: string, options: RequestInit = {}) =
     throw new Error(data.error || 'Erro ao buscar dados');
   }
 
-  console.log('response http service2', data);
   return data;
 };
