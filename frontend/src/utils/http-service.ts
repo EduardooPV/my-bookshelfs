@@ -10,6 +10,8 @@ export const httpService = async (endpoint: string, options: RequestInit = {}) =
     credentials: 'include',
   });
 
+  console.log('response http service', response);
+
   if (response.status === 401) {
     toast({
       variant: 'error',

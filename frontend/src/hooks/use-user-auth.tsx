@@ -54,6 +54,8 @@ export function useUserAuth() {
         body: JSON.stringify({ email, password }),
       });
 
+      console.log('response hooks', response);
+
       if (!response?.session?.access_token) {
         throw new Error('Falha ao realizar login.');
       }
