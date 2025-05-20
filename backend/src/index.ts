@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -14,23 +13,15 @@ import cookieParser from 'cookie-parser';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
-const corsOptions = cors({
-  origin: (origin: string | undefined, callback: Function) => {
-    if (
-      !origin ||
-      origin.startsWith('https://my-bookshelfs-frontend') ||
-      origin === 'http://localhost:3000'
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type, Authorization',
-  optionsSuccessStatus: 200,
+const corsConfig = {
+  origin: [
+    'https://my-bookshelfs-frontend.vercel.app',
+    'http://localhost:3000',
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
-});
+};
 
 const rateLimitOptions = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -43,13 +34,13 @@ const helmetOptions = helmet({
   contentSecurityPolicy: false,
 });
 
+app.use(cors(corsConfig));
 app.use(jsonOptions);
-app.use(corsOptions);
+app.use(cookieParser());
 app.use(rateLimitOptions);
 app.use(helmetOptions);
 app.use(hpp());
 app.use(requestLogger);
-app.use(cookieParser());
 
 app.set('trust proxy', 1);
 
