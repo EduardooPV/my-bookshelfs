@@ -34,6 +34,9 @@ const signInController = async (req: Request, res: Response) => {
       path: '/',
     });
 
+    console.log('session', session);
+    console.log('access_token', accessToken);
+
     res.status(200).json({ session });
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });

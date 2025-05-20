@@ -13,6 +13,8 @@ const authMiddleware = async (
   try {
     const token = req.cookies?.access_token;
 
+    console.log('token middleware', token);
+
     if (!token) {
       res.status(401).json({
         error: 'Token não fornecido',
