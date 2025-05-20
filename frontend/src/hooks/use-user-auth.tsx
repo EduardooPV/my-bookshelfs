@@ -49,10 +49,20 @@ export function useUserAuth() {
     try {
       setLoading(true);
 
-      await httpService('/auth/signin', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
         method: 'POST',
         body: JSON.stringify({ email, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
       });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw { message: data.error };
+      }
 
       router.push('/dashboard');
     } catch (err: any) {
