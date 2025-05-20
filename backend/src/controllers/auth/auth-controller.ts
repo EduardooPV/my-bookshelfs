@@ -44,6 +44,13 @@ const signOutController = async (req: Request, res: Response) => {
   try {
     const out = await signOut();
 
+    res.clearCookie('access_token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+    });
+
     res.status(200).json({ out });
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });

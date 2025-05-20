@@ -34,6 +34,7 @@ const helmetOptions = helmet({
   contentSecurityPolicy: false,
 });
 
+app.set('trust proxy', 1);
 app.use(cors(corsConfig));
 app.use(jsonOptions);
 app.use(cookieParser());
@@ -41,8 +42,6 @@ app.use(rateLimitOptions);
 app.use(helmetOptions);
 app.use(hpp());
 app.use(requestLogger);
-
-app.set('trust proxy', 1);
 
 app.use('/auth', authRouter);
 app.use('/book', authMiddleware, bookRouter);
