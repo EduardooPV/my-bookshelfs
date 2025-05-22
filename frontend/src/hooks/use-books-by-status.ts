@@ -1,38 +1,39 @@
-import { useEffect, useState, useCallback } from 'react';
-import { getStatusBook, IGetStatusBook } from '@/services/get-status-book';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState, useCallback } from 'react';
+import { getStatusBook } from '@/services/get-status-book';
 import { changeStatusBook } from '@/services/change-status-book';
 import { deleteBookStatus as deleteBookStatusService } from '../services/delete-status-book';
 
 export function useBooksByStatus(status?: 'wishlist' | 'reading' | 'done' | 'delete') {
-  const [books, setBooks] = useState<IGetStatusBook[] | null>(null);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+
+  const {
+    data: books = [],
+    isLoading: loading,
+    refetch: fetchBooks,
+  } = useQuery({
+    queryKey: ['books', status],
+    queryFn: () => getStatusBook(status),
+    enabled: true,
+    staleTime: 1000 * 60 * 5, // 5 minutos
+  });
+
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-
-  const fetchBooks = useCallback(async () => {
-    if (!status) return;
-
-    setLoading(true);
-    try {
-      const data = await getStatusBook(status);
-      setBooks(data);
-    } catch {
-      setBooks([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [status]);
 
   const updateBookStatus = useCallback(
     async (bookId: string, newStatus: 'wishlist' | 'reading' | 'done') => {
       setActionLoading(bookId);
       try {
         await changeStatusBook(bookId, newStatus);
-        await fetchBooks();
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['books'] }),
+          queryClient.invalidateQueries({ queryKey: ['count-books'] }),
+        ]);
       } finally {
         setActionLoading(null);
       }
     },
-    [fetchBooks],
+    [queryClient],
   );
 
   const deleteBookStatus = useCallback(
@@ -40,17 +41,16 @@ export function useBooksByStatus(status?: 'wishlist' | 'reading' | 'done' | 'del
       setActionLoading(bookId);
       try {
         await deleteBookStatusService(bookId);
-        await fetchBooks();
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['books'] }),
+          queryClient.invalidateQueries({ queryKey: ['count-books'] }),
+        ]);
       } finally {
         setActionLoading(null);
       }
     },
-    [fetchBooks],
+    [queryClient],
   );
-
-  useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks]);
 
   return { books, loading, actionLoading, updateBookStatus, deleteBookStatus, fetchBooks };
 }

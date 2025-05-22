@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   BookOpen,
   BookMarked,
@@ -45,7 +44,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [search, setSearch] = useState('');
   const { logout } = useUserAuth();
 
   const handleLogout = async () => {
@@ -122,7 +120,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main content */}
       <div className="flex flex-1 flex-col md:pl-64">
-        <header className="sticky top-0 z-10 mb-4 flex h-16 items-center justify-between gap-4 bg-background px-4 md:px-6">
+        <header className="sticky top-0 z-10 mb-4 flex h-16 items-center justify-end gap-4 bg-background px-4 md:px-6">
           {/* Mobile sidebar */}
           {isMobile && (
             <Sheet>
@@ -140,24 +138,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Sidebar />
               </SheetContent>
             </Sheet>
-          )}
-
-          {/* Verificar se estou na página /dashboard/search, se sim não renderizar esse componente, se não, renderizar. */}
-          {pathname !== '/dashboard/search' && ACTIVE_SEARCH ? (
-            <div className="w-full flex-1 md:max-w-sm">
-              <div className="relative block">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Procurar livros..."
-                  className="leading-0 w-full rounded-lg bg-background pl-8 md:w-full lg:w-[400px]"
-                  onChange={(e) => setSearch(e.currentTarget.value)}
-                  value={search}
-                />
-              </div>
-            </div>
-          ) : (
-            <div />
           )}
 
           <div className="flex items-center gap-2">
