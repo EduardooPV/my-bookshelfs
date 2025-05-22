@@ -113,14 +113,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       {!isMobile && (
-        <div className="hidden border-r md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
+        <div className="hidden border-r md:fixed md:inset-y-0 md:flex md:w-80 md:flex-col">
           <Sidebar />
         </div>
       )}
 
       {/* Main content */}
-      <div className="flex flex-1 flex-col md:pl-64">
-        <header className="sticky top-0 z-10 mb-4 flex h-16 items-center justify-end gap-4 bg-background px-4 md:px-6">
+      <div className="flex flex-1 flex-col md:pl-80">
+        <header className="sticky top-0 z-10 mb-4 flex h-16 items-center justify-between gap-4 bg-background px-4 md:px-6">
           {/* Mobile sidebar */}
           {isMobile && (
             <Sheet>
@@ -139,6 +139,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </SheetContent>
             </Sheet>
           )}
+
+          <div className="flex-1" />
+
+          {/* Desktop theme and user menu */}
 
           <div className="flex items-center gap-2">
             <DropdownMenu>
