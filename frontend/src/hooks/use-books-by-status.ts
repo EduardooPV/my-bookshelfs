@@ -1,13 +1,16 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getStatusBook, IGetStatusBook } from '@/services/get-status-book';
 import { changeStatusBook } from '@/services/change-status-book';
+import { deleteBookStatus as deleteBookStatusService } from '../services/delete-status-book';
 
-export function useBooksByStatus(status: 'wishlist' | 'reading' | 'done') {
+export function useBooksByStatus(status?: 'wishlist' | 'reading' | 'done' | 'delete') {
   const [books, setBooks] = useState<IGetStatusBook[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   const fetchBooks = useCallback(async () => {
+    if (!status) return;
+
     setLoading(true);
     try {
       const data = await getStatusBook(status);
@@ -32,9 +35,22 @@ export function useBooksByStatus(status: 'wishlist' | 'reading' | 'done') {
     [fetchBooks],
   );
 
+  const deleteBookStatus = useCallback(
+    async (bookId: string) => {
+      setActionLoading(bookId);
+      try {
+        await deleteBookStatusService(bookId);
+        await fetchBooks();
+      } finally {
+        setActionLoading(null);
+      }
+    },
+    [fetchBooks],
+  );
+
   useEffect(() => {
     fetchBooks();
   }, [fetchBooks]);
 
-  return { books, loading, actionLoading, updateBookStatus, fetchBooks };
+  return { books, loading, actionLoading, updateBookStatus, deleteBookStatus, fetchBooks };
 }
