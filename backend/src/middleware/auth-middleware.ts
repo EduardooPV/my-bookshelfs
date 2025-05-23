@@ -11,12 +11,7 @@ const authMiddleware = async (
   next: NextFunction,
 ) => {
   try {
-    const headerTokem = req.headers.authorization
-      ?.replace('Bearer ', '')
-      .trim();
-    const cookieToken = req.cookies?.access_token;
-
-    const token = headerTokem || cookieToken;
+    const token = req.cookies?.access_token;
 
     if (!token) {
       res.status(401).json({

@@ -35,7 +35,7 @@ describe('Auth Middleware', () => {
 
   it('should return 401 if token is not provided', async () => {
     const reqWithoutToken = {
-      headers: {},
+      cookies: undefined,
     } as unknown as AuthenticatedRequest;
 
     await authMiddleware(reqWithoutToken, mockResponse, mockNext);

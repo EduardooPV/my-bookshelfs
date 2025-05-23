@@ -3,50 +3,26 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, BookMarked, BookText, LoaderCircleIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { getCountStatusBooks, ICountStatusBook } from '@/services/count-status-book';
-import { getStatusBook, IGetStatusBook } from '../../services/get-status-book';
+import { IGetStatusBook } from '../../services/get-status-book';
+
+import { useCountBooksByStatus } from '@/hooks/use-count-books-by-status';
+import { useBooksByStatus } from '../../hooks/use-books-by-status';
 
 export default function Dashboard() {
-  const [loading, setLoading] = useState(true);
-  const [countReadingBooks, setCountReadingBooks] = useState<ICountStatusBook | null>(null);
-  const [countWishlistBooks, setCountWishlistBooks] = useState<ICountStatusBook | null>(null);
-  const [countDoneBooks, setCountDoneBooks] = useState<ICountStatusBook | null>(null);
-  const [books, setBooks] = useState<IGetStatusBook[] | null>(null);
+  const { data: countReadingBooks, isLoading: loadingReading } = useCountBooksByStatus('reading');
+  const { data: countWishlistBooks, isLoading: loadingWishlist } =
+    useCountBooksByStatus('wishlist');
+  const { data: countDoneBooks, isLoading: loadingDone } = useCountBooksByStatus('done');
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [
-        countReadingBooksResponse,
-        countWishlistBooksResponse,
-        countDoneBooksResponse,
-        booksResponse,
-      ] = await Promise.all([
-        getCountStatusBooks('reading'),
-        getCountStatusBooks('wishlist'),
-        getCountStatusBooks('done'),
-        getStatusBook(),
-      ]);
-      setCountReadingBooks(countReadingBooksResponse);
-      setCountWishlistBooks(countWishlistBooksResponse);
-      setCountDoneBooks(countDoneBooksResponse);
-      setBooks(booksResponse);
-    } catch (error) {
-      console.error('Erro ao buscar a soma dos livros lidos:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { books, loading: loadingBooks } = useBooksByStatus();
+
+  const loading = loadingReading || loadingWishlist || loadingDone || loadingBooks;
+
   const StatusEnum: Record<IGetStatusBook['status'], string> = {
     wishlist: 'Lista de desejo',
     reading: 'Lendo',
     done: 'Lido',
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -62,7 +38,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="h-10">
-              {loading ? (
+              {loadingWishlist ? (
                 <div className="flex h-full items-center">
                   <span className="animate-spin">
                     <LoaderCircleIcon />
@@ -75,6 +51,7 @@ export default function Dashboard() {
             <p className="text-xs text-muted-foreground">Livros na sua lista de leitura</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Lendo atualmente</CardTitle>
@@ -82,7 +59,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="h-10">
-              {loading ? (
+              {loadingReading ? (
                 <div className="flex h-full items-center">
                   <span className="animate-spin">
                     <LoaderCircleIcon />
@@ -95,6 +72,7 @@ export default function Dashboard() {
             <p className="text-xs text-muted-foreground">Livros em progresso</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Lido</CardTitle>
@@ -102,7 +80,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="h-10">
-              {loading ? (
+              {loadingDone ? (
                 <div className="flex h-full items-center">
                   <span className="animate-spin">
                     <LoaderCircleIcon />

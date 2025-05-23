@@ -10,6 +10,8 @@ export const httpService = async (endpoint: string, options: RequestInit = {}) =
     credentials: 'include',
   });
 
+  const data = await response.json(); // lê o corpo só uma vez
+
   if (response.status === 401) {
     toast({
       variant: 'error',
@@ -20,10 +22,8 @@ export const httpService = async (endpoint: string, options: RequestInit = {}) =
   }
 
   if (!response.ok) {
-    const error = await response.json();
-
-    throw new Error(error.error || 'Erro ao buscar dados');
+    throw new Error(data.error || 'Erro ao buscar dados');
   }
 
-  return response.json();
+  return data;
 };
