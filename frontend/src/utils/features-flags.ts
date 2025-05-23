@@ -1,1 +1,1 @@
-export const ACTIVE_SEARCH = false;
+export const ACTIVE_SEARCH = true;

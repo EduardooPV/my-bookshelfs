@@ -50,7 +50,7 @@ const getAllBooksService = async (
   const fields = ['key', 'title', 'author_name', 'cover_i'].join(',');
 
   const response = await fetch(
-    `${baseUrl}?q=${encodeURIComponent(searchQuery)}&offset=${offset}&limit=${limit}&fields=${fields}`,
+    `${baseUrl}?title=${encodeURIComponent(searchQuery)}&type=/type/edition&offset=${offset}&limit=${limit}&fields=${fields}`,
   );
 
   if (!response.ok) {
