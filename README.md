@@ -12,14 +12,14 @@ My Bookshelfs é um sistema completo para ajudar usuários a gerenciar seus livr
 - **Autenticação**: Supabase Auth (JWT)
 - **Testes**: Jest
 - **Padronização**: ESLint & Prettier
+- **CI/CI**: Deploy automático para ambientes de staging e produção com deploy via actions na Vercel.
 
 ## Funcionalidades Principais
 
 - Cadastro e autenticação de usuários
 - Adição e organização de livros
-- Registro de leituras (status: Para ler, Lendo, Lido)
-- Avaliação e comentários sobre os livros
-- Lista de desejos para futuros livros
+- Registro de leituras (status: Lista de desejo, Lendo, Lido)
+- Listagem de livros utilizando a api `Open library` (provavelmente irei mudar)
 
 ## Estrutura do Repositório
 
