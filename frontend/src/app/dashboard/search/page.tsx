@@ -124,8 +124,8 @@ export default function SearchPage() {
                           <p className="text-sm text-muted-foreground">{book.author}</p>
                         </div>
                         <div className="flex gap-4">
-                          <Button variant="outline" size="sm" asChild className="w-full">
-                            <Link href={`/dashboard/book/${book.key}`}>Ver detalhes</Link>
+                          <Button variant="outline" size="sm" asChild className="w-full" disabled>
+                            <Link href="">Ver detalhes</Link>
                           </Button>
 
                           <DropdownMenu>
