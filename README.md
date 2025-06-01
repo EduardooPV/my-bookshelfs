@@ -26,3 +26,9 @@ My Bookshelfs é um sistema completo para ajudar usuários a gerenciar seus livr
 - `/` - Documentação global e informações gerais do projeto
 - `/backend` - API construída com Express.js e TypeScript ([veja mais](./backend/README.md))
 - `/frontend` - Aplicação web desenvolvida com Next.js e React ([veja mais](./frontend/README.md))
+
+## Preview
+
+![image](https://github.com/user-attachments/assets/b3d71346-8863-403c-82d2-1e40d312fe38)
+
+![image](https://github.com/user-attachments/assets/f03a779c-8f22-4478-a09e-a5f76996983b)
