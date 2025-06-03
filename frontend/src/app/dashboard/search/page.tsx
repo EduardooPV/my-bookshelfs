@@ -152,7 +152,6 @@ export default function SearchPage() {
                         >
                           <p>Lista de desejo</p>
                         </Button>
-
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button size="sm" className="w-10">

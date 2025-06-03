@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { AuthenticatedRequest } from '../../../middleware/auth-middleware';
 
 const mockRequest = {
-  headers: { authorization: 'Bearer valid-token' },
+  cookies: { access_token: 'valid-token' },
 } as unknown as AuthenticatedRequest;
 
 const mockResponse = {
