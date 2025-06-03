@@ -39,15 +39,8 @@ const signOut = async () => {
 };
 
 const forgotPassword = async (email: string) => {
-  const url =
-    process.env.NODE_ENV === 'production'
-      ? 'https://my-bookshelfs-frontend.vercel.app/auth/reset-password'
-      : 'http://localhost:3000/auth/reset-password';
-
-  console.log(process.env.NODE_ENV);
-
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: url,
+    redirectTo: 'https://my-bookshelfs-frontend.vercel.app/auth/reset-password',
   });
 
   if (error) {
