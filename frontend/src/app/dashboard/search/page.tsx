@@ -17,12 +17,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { IBook, searchBooks } from '../../../services/search-books';
 import { useBooksByStatus } from '../../../hooks/use-books-by-status';
+import { useInfiniteScroll } from '../../../hooks/use-infinite-scroll';
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<IBook[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const { updateBookStatus } = useBooksByStatus();
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [lastQuery, setLastQuery] = useState('');
+  const { updateBookStatus, actionLoading } = useBooksByStatus();
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,8 +36,13 @@ export default function SearchPage() {
         setIsSearching(true);
         setSearchResults([]);
 
-        const response = await searchBooks(searchQuery, 1, 5);
+        const response = await searchBooks(searchQuery, 1, 30);
+
+        setLastQuery(searchQuery);
         setSearchResults(response.books);
+        setTotalPages(response.totalPages);
+        setPage(response.page + 1);
+        setIsSearching(false);
       } catch (error) {
         console.error('Error fetching search results:', error);
         setIsSearching(false);
@@ -44,8 +53,19 @@ export default function SearchPage() {
     }
   };
 
+  const fetchMore = async () => {
+    if (isSearching || page > totalPages) return;
+    setIsSearching(true);
+    const response = await searchBooks(lastQuery, page, 20);
+    setSearchResults((prev) => [...prev, ...response.books]);
+    setPage((prev) => prev + 1);
+    setIsSearching(false);
+  };
+
+  useInfiniteScroll(fetchMore, page <= totalPages, isSearching);
+
   return (
-    <div className="mx-auto h-full max-w-6xl">
+    <div className="mx-auto h-full">
       <div className="flex h-full flex-col gap-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Buscar livros</h1>
@@ -74,7 +94,7 @@ export default function SearchPage() {
           </Button>
         </form>
 
-        {isSearching && (
+        {searchResults.length === 0 && isSearching && (
           <div className="flex-1">
             <div className="flex h-full w-full items-center justify-center">
               <span className="animate-spin">
@@ -100,68 +120,86 @@ export default function SearchPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {searchResults.map((book) => (
-              <div key={book.key} className="flex">
-                <Card className="w-full overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="flex flex-col">
-                      <div className="relative aspect-[2/3] w-full">
-                        <Image
-                          src={book.cover || '/placeholder.svg'}
-                          alt={book.title}
-                          fill
-                          className="object-cover transition-all hover:scale-105"
-                        />
+            {searchResults.map((book, index) => (
+              <Card key={index} className="w-full overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="flex flex-col">
+                    <div className="relative aspect-[2/3] w-full overflow-hidden">
+                      <Image
+                        src={book.cover || '/placeholder.svg'}
+                        alt={book.title}
+                        fill
+                        className="object-cover transition-all hover:scale-105"
+                      />
+                    </div>
+
+                    <div className="flex flex-1 flex-col justify-between p-4">
+                      <div>
+                        <h3 className="truncate font-semibold">
+                          <Link href={`/dashboard/book/${book.key}`} className="hover:underline">
+                            {book.title}
+                          </Link>
+                        </h3>
+                        <p className="text-sm text-muted-foreground">{book.author}</p>
                       </div>
+                      <div className="mt-4 flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          className="flex w-full items-center justify-center"
+                          disabled={!!actionLoading}
+                          onClick={() => updateBookStatus(book.key, 'wishlist')}
+                        >
+                          <p>Lista de desejo</p>
+                        </Button>
 
-                      <div className="flex flex-1 flex-col justify-between gap-4 p-4">
-                        <div>
-                          <h3 className="truncate font-semibold">
-                            <Link href={`/dashboard/book/${book.key}`} className="hover:underline">
-                              {book.title}
-                            </Link>
-                          </h3>
-                          <p className="text-sm text-muted-foreground">{book.author}</p>
-                        </div>
-                        <div className="flex gap-4">
-                          <Button variant="outline" size="sm" asChild className="w-full">
-                            <Link href={`/dashboard/book/${book.key}`}>Ver detalhes</Link>
-                          </Button>
-
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button size="sm" className="w-10">
-                                ...
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-[200px]">
-                              <DropdownMenuItem
-                                onClick={() => updateBookStatus(book.key, 'wishlist')}
-                              >
-                                <BookMarked className="mr-2 h-4 w-4" />
-                                <span>Lista de desejo</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => updateBookStatus(book.key, 'reading')}
-                              >
-                                <BookOpen className="mr-2 h-4 w-4" />
-                                <span>Lendo atualmente</span>
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => updateBookStatus(book.key, 'done')}>
-                                <BookText className="mr-2 h-4 w-4" />
-                                <span>Lido</span>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button size="sm" className="w-10">
+                              {actionLoading === book.key ? (
+                                <span className="animate-spin">
+                                  <LoaderCircleIcon />
+                                </span>
+                              ) : (
+                                '...'
+                              )}
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-[200px]">
+                            <DropdownMenuItem
+                              onClick={() => updateBookStatus(book.key, 'wishlist')}
+                            >
+                              <BookMarked className="mr-2 h-4 w-4" />
+                              <span>Lista de desejo</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => updateBookStatus(book.key, 'reading')}>
+                              <BookOpen className="mr-2 h-4 w-4" />
+                              <span>Lendo atualmente</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => updateBookStatus(book.key, 'done')}>
+                              <BookText className="mr-2 h-4 w-4" />
+                              <span>Lido</span>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         )}
+
+        <div
+          className={`flex-1 py-10 ${searchResults.length !== 0 && isSearching ? 'flex' : 'hidden'}`}
+        >
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="animate-spin">
+              <LoaderCircleIcon />
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

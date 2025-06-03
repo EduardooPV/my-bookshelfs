@@ -110,9 +110,9 @@ export default function Dashboard() {
               </div>
             )}
 
-            {books?.length === 0 ? (
-              <div className="flex h-full w-full items-center justify-center">
-                <p className="text-muted-foreground">Nenhum movimentado nos últimos tempos..</p>
+            {books?.length === 0 && !loading ? (
+              <div className="flex h-full w-full items-center justify-center py-10">
+                <p className="text-muted-foreground">Nenhum movimentado nos últimos tempos.</p>
               </div>
             ) : (
               <div

@@ -69,17 +69,19 @@ export default function WantToRead() {
                         onClick={() => updateBookStatus(book.book_id, 'reading')}
                         disabled={!!actionLoading}
                       >
-                        {!!actionLoading ? (
-                          <LoaderCircleIcon className="animate-spin" />
-                        ) : (
-                          'Começar a ler'
-                        )}
+                        Começar a ler
                       </Button>
 
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button size="sm" className="w-10">
-                            ...
+                          <Button size="sm" className="w-10" disabled={!!actionLoading}>
+                            {actionLoading === book.book_id ? (
+                              <span className="animate-spin">
+                                <LoaderCircleIcon />
+                              </span>
+                            ) : (
+                              '...'
+                            )}
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-[200px]">

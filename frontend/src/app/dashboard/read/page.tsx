@@ -14,7 +14,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export default function Read() {
-  const { books, loading, updateBookStatus, deleteBookStatus } = useBooksByStatus('done');
+  const { books, loading, actionLoading, updateBookStatus, deleteBookStatus } =
+    useBooksByStatus('done');
 
   return (
     <div className="flex h-full flex-col space-y-6">
@@ -57,8 +58,8 @@ export default function Read() {
                   <div className="p-4">
                     <h3 className="truncate font-semibold">{book.title}</h3>
                     <p className="text-sm text-muted-foreground">{book.author}</p>
-                    <div className="mt-2 flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">
+                    <div className="mt-2 flex items-center text-sm text-muted-foreground">
+                      <span>
                         Finalizado em: {new Date(book.completion_at).toLocaleDateString()}
                       </span>
                     </div>
@@ -68,16 +69,22 @@ export default function Read() {
                         size="sm"
                         variant="secondary"
                         className="flex w-full items-center justify-center"
+                        disabled={!!actionLoading}
+                        onClick={() => deleteBookStatus(book.book_id)}
                       >
-                        <Link className="flex-1" href={`/dashboard/book/${book.id}`}>
-                          Ver detalhes
-                        </Link>
+                        <p className="flex-1">Remover livro</p>
                       </Button>
 
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button size="sm" className="w-10">
-                            ...
+                          <Button size="sm" className="w-10" disabled={!!actionLoading}>
+                            {actionLoading === book.book_id ? (
+                              <span className="animate-spin">
+                                <LoaderCircleIcon />
+                              </span>
+                            ) : (
+                              '...'
+                            )}
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-[200px]">
