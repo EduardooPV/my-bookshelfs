@@ -1,4 +1,6 @@
 import { supabase } from '../../config/database';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const signUp = async (email: string, password: string) => {
   const { data, error } = await supabase.auth.signUp({

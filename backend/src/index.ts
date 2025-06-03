@@ -26,12 +26,34 @@ const corsConfig = {
 const rateLimitOptions = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 1000,
+  limit: 100,
   message:
     'Muitas requisições vindas deste IP, por favor, tente novamente mais tarde.',
 });
 
 const helmetOptions = helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'", 'https://my-bookshelfs-frontend.vercel.app'],
+      scriptSrc: ["'self'", 'https://my-bookshelfs-frontend.vercel.app'],
+      styleSrc: [
+        "'self'",
+        'https://my-bookshelfs-frontend.vercel.app',
+        "'unsafe-inline'",
+      ],
+      imgSrc: ["'self'", 'data:', 'https://my-bookshelfs-frontend.vercel.app'],
+      connectSrc: ["'self'", 'https://my-bookshelfs-frontend.vercel.app'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      objectSrc: ["'none'"],
+      frameAncestors: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+  referrerPolicy: { policy: 'no-referrer' },
+  frameguard: { action: 'deny' },
+  xssFilter: true,
+  noSniff: true,
+  hidePoweredBy: true,
 });
 
 app.set('trust proxy', 1);
