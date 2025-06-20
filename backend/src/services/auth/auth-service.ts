@@ -1,4 +1,6 @@
 import { supabase } from '../../config/database';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const signUp = async (email: string, password: string) => {
   const { data, error } = await supabase.auth.signUp({
@@ -38,7 +40,7 @@ const signOut = async () => {
 
 const forgotPassword = async (email: string) => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'http://localhost:3000/auth/reset-password',
+    redirectTo: 'https://my-bookshelfs-frontend.vercel.app/auth/reset-password',
   });
 
   if (error) {

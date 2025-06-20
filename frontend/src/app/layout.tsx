@@ -11,7 +11,6 @@ export const metadata = {
   title: 'My bookshelfs - Acompanhe sua jornada de leitura',
   description:
     'Uma plataforma moderna para os amantes de livros acompanharem sua jornada de leitura',
-  generator: 'v0.dev',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
