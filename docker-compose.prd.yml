@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  frontend:
+    image: my-bookshelfs_frontend_prd:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prd
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512MB
+
+  backend:
+    image: my-bookshelfs_backend_prd:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prd
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./backend/.env
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512MB
