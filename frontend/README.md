@@ -11,6 +11,9 @@ Este projeto é o frontend do My Bookshelfs, uma aplicação para organização 
 - **Supabase**: Backend as a Service utilizado para autenticação e persistência de dados, integrando facilmente com o frontend via hooks e serviços.
 - **Jest**: Ferramenta de testes unitários e integração, garantindo a qualidade do código.
 - **ESLint & Prettier**: Ferramentas para padronização e qualidade do código.
+- **Dockerfile.dev**: Imagem para desenvolvimento, com hot reload e volumes mapeados.
+- **Dockerfile.prd**: Imagem otimizada para produção, realizando build e servindo a aplicação Next.js pronta.
+
 
 ## Organização do Projeto
 
@@ -29,3 +32,4 @@ Este projeto é o frontend do My Bookshelfs, uma aplicação para organização 
 - Tipagem forte com TypeScript.
 - Padronização de código com ESLint e Prettier.
 - Testes automatizados com Jest.
+- Imagens separadas para desenvolvimento e produção.
