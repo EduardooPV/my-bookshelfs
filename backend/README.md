@@ -10,6 +10,8 @@ Este projeto é o backend do My Bookshelfs, responsável pela API, autenticaçã
 - **Supabase**: Utilizado como banco de dados (PostgreSQL) e autenticação.
 - **Jest**: Ferramenta de testes unitários e integração, garantindo a qualidade do código.
 - **ESLint & Prettier**: Ferramentas para padronização e qualidade do código.
+- **Dockerfile.dev**: Imagem para desenvolvimento, com hot reload e volumes mapeados.
+- **Dockerfile.prd**: Imagem otimizada para produção, realizando build e rodando o código transpilado.
 - **Vercel**: Plataforma de deploy serverless (opcional).
 
 ## Organização do Projeto
@@ -32,3 +34,4 @@ Este projeto é o backend do My Bookshelfs, responsável pela API, autenticaçã
 - Padronização de código com ESLint e Prettier.
 - Testes automatizados com Jest.
 - Variáveis de ambiente para configurações sensíveis.
+- Imagens separadas para desenvolvimento e produção.

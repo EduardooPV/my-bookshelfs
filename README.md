@@ -13,6 +13,9 @@ My Bookshelfs é um sistema completo para ajudar usuários a gerenciar seus livr
 - **Testes**: Jest
 - **Padronização**: ESLint & Prettier
 - **CI/CI**: Deploy automático para ambientes de staging e produção com deploy via actions na Vercel.
+- **Dockerfile.dev** e **Dockerfile.prd**: Arquivos Dockerfile específicos para ambiente de desenvolvimento (`dev`) e produção (`prd`) em ambos os diretórios `backend` e `frontend`.
+- **docker-compose.dev.yml**: Orquestra os containers de frontend e backend em modo desenvolvimento, com hot reload e volumes mapeados.
+- **docker-compose.prd.yml**: Orquestra os containers otimizados para produção, utilizando as imagens finais de frontend e backend.
 
 ## Funcionalidades Principais
 
