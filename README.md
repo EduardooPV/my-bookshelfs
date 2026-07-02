@@ -129,6 +129,27 @@ Documentação detalhada de cada camada:
 
 ---
 
+## CI/CD
+
+O projeto possui pipelines automáticos via **GitHub Actions** que cobrem qualidade de código, testes e deploy:
+
+| Workflow | Trigger | O que faz |
+|---|---|---|
+| **Frontend Checks** | PR para `staging` ou push em `main` (changes em `frontend/`) | ESLint + Prettier + build de verificação |
+| **Backend Checks** | PR para `staging` ou push em `main` (changes em `backend/`) | ESLint + Prettier + testes unitários (Jest) |
+| **Frontend Deploy** | Push em `main` (prod) · PR para `staging` | Build + deploy na Vercel (prod ou preview) |
+| **Backend Deploy** | Push em `main` (prod) · PR para `staging` | Build + deploy na Vercel (prod ou preview) |
+| **Keep Alive** | Cron a cada 3 dias | Ping no `/health` do backend para evitar que o Supabase pause por inatividade |
+| **Validate PR** | Abertura/atualização de PR | Valida título e estrutura do pull request |
+
+### Fluxo de branches
+
+```
+feature/* → staging (PR + checks + preview deploy)
+                ↓
+             main (merge + deploy produção)
+```
+
 ## Screenshots
 
 ![Dashboard com estante de livros](https://github.com/user-attachments/assets/b3d71346-8863-403c-82d2-1e40d312fe38)
