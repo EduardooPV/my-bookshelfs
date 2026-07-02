@@ -10,6 +10,7 @@ import { app } from './app';
 import { authMiddleware } from './middleware/auth-middleware';
 import { requestLogger } from './middleware/request-logger-middleware';
 import cookieParser from 'cookie-parser';
+import { supabase } from './config/database';
 
 const jsonOptions = express.json({ limit: '10kb' });
 
@@ -25,7 +26,6 @@ const corsConfig = {
 
 const rateLimitOptions = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 1000,
   limit: 100,
   message:
     'Muitas requisições vindas deste IP, por favor, tente novamente mais tarde.',
@@ -64,6 +64,15 @@ app.use(rateLimitOptions);
 app.use(helmetOptions);
 app.use(hpp());
 app.use(requestLogger);
+
+app.get('/health', async (_req, res) => {
+  const { error } = await supabase.from('books').select('id').limit(1);
+  if (error) {
+    res.status(503).json({ status: 'error', message: error.message });
+    return;
+  }
+  res.status(200).json({ status: 'ok' });
+});
 
 app.use('/auth', authRouter);
 app.use('/book', authMiddleware, bookRouter);

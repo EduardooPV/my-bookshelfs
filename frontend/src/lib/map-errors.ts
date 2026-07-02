@@ -26,6 +26,10 @@ export function mapSupabaseError(error?: AuthError | null): string {
       return 'A senha deve ter pelo menos 6 caracteres';
     case 'Invalid credentials':
       return 'Senha ou email inválidos.';
+    case 'Por favor, confirme seu e-mail antes de fazer login.':
+      return 'Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.';
+    case 'email rate limit exceeded':
+      return 'Muitas tentativas. Aguarde alguns minutos antes de tentar novamente.';
 
     // fallback genérico
     default:

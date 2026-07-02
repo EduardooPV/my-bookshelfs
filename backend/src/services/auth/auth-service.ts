@@ -3,16 +3,25 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const signUp = async (email: string, password: string) => {
+  const frontendUrl =
+    process.env.FRONTEND_URL ?? 'https://my-bookshelfs-frontend.vercel.app';
+
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      emailRedirectTo: `${frontendUrl}/auth/callback`,
+    },
   });
 
   if (error) {
     throw new Error(error.message);
   }
 
-  return data.user;
+  return {
+    user: data.user,
+    emailConfirmationPending: !data.user?.email_confirmed_at,
+  };
 };
 
 const signIn = async (email: string, password: string) => {
@@ -23,6 +32,10 @@ const signIn = async (email: string, password: string) => {
 
   if (error) {
     throw new Error(error.message);
+  }
+
+  if (!data.user?.email_confirmed_at) {
+    throw new Error('Por favor, confirme seu e-mail antes de fazer login.');
   }
 
   return data.session;
@@ -39,8 +52,10 @@ const signOut = async () => {
 };
 
 const forgotPassword = async (email: string) => {
+  const frontendUrl =
+    process.env.FRONTEND_URL ?? 'https://my-bookshelfs-frontend.vercel.app';
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://my-bookshelfs-frontend.vercel.app/auth/reset-password',
+    redirectTo: `${frontendUrl}/auth/reset-password`,
   });
 
   if (error) {
@@ -62,4 +77,24 @@ const resetPassword = async (password: string) => {
   return 'Senha redefinida com sucesso!';
 };
 
-export { signUp, signIn, signOut, forgotPassword, resetPassword };
+const validateAndReturnToken = async (access_token: string) => {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(access_token);
+
+  if (error || !user) {
+    throw new Error('Token inválido ou expirado');
+  }
+
+  return access_token;
+};
+
+export {
+  signUp,
+  signIn,
+  signOut,
+  forgotPassword,
+  resetPassword,
+  validateAndReturnToken,
+};
