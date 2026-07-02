@@ -34,8 +34,11 @@ describe('Auth Service', () => {
         error: null,
       });
 
-      const user = await signUp('test@example.com', 'password123');
-      expect(user).toEqual({ id: '123', email: 'test@example.com' });
+      const result = await signUp('test@example.com', 'password123');
+      expect(result).toEqual({
+        user: { id: '123', email: 'test@example.com' },
+        emailConfirmationPending: true,
+      });
     });
 
     it('should throw an error if sign up fails', async () => {
@@ -53,7 +56,10 @@ describe('Auth Service', () => {
   describe('signIn', () => {
     it('should sign in a user successfully', async () => {
       mockAuth.signInWithPassword.mockResolvedValue({
-        data: { session: { access_token: 'token' } },
+        data: {
+          user: { email_confirmed_at: '2024-01-01T00:00:00Z' },
+          session: { access_token: 'token' },
+        },
         error: null,
       });
 

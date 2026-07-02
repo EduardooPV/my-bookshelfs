@@ -75,7 +75,7 @@ export default function SignIn() {
                   </div>
                   <ToggleEye password={password} setPassword={setPassword} />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? (
                     <span className="animate-spin">
                       <LoaderCircleIcon />

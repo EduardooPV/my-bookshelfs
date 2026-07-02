@@ -113,10 +113,9 @@ export default function Home() {
                     <path d="M15.1 18H3" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold">Sistema de classificação</h3>
+                <h3 className="text-xl font-bold">Acompanhe seu progresso</h3>
                 <p className="text-center text-muted-foreground">
-                  Avalie e comente livros que você leu para compartilhar suas ideias com outras
-                  pessoas
+                  Veja quantos livros você leu, está lendo e quer ler — tudo no seu painel
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg p-4">

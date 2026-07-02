@@ -57,7 +57,11 @@ export default function SearchPage() {
     if (isSearching || page > totalPages) return;
     setIsSearching(true);
     const response = await searchBooks(lastQuery, page, 20);
-    setSearchResults((prev) => [...prev, ...response.books]);
+    setSearchResults((prev) => {
+      const existingKeys = new Set(prev.map((b) => b.key));
+      const newBooks = response.books.filter((b) => !existingKeys.has(b.key));
+      return [...prev, ...newBooks];
+    });
     setPage((prev) => prev + 1);
     setIsSearching(false);
   };
@@ -120,8 +124,8 @@ export default function SearchPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {searchResults.map((book, index) => (
-              <Card key={index} className="w-full overflow-hidden">
+            {searchResults.map((book) => (
+              <Card key={book.key} className="w-full overflow-hidden">
                 <CardContent className="p-0">
                   <div className="flex flex-col">
                     <div className="relative aspect-[2/3] w-full overflow-hidden">

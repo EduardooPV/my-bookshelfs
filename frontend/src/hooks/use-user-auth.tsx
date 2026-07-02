@@ -19,18 +19,19 @@ export function useUserAuth() {
     try {
       setLoading(true);
 
-      await httpService('/auth/signup', {
+      const { emailConfirmationPending } = await httpService('/auth/signup', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
 
-      await fetch('/api/auth/signin', {
+      if (emailConfirmationPending) {
+        router.push('/auth/check-email');
+        return;
+      }
+
+      await httpService('/auth/signin', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
       });
 
       router.push('/dashboard');
@@ -85,7 +86,7 @@ export function useUserAuth() {
         .then(({ error }) => {
           if (error) {
             toast({
-              variant: 'success',
+              variant: 'error',
               description: 'Erro ao definir sessão',
             });
           }
@@ -160,7 +161,7 @@ export function useUserAuth() {
     try {
       setLoading(true);
 
-      await fetch(`api/auth/logout`, { method: 'POST', credentials: 'include' });
+      await fetch(`/api/auth/logout`, { method: 'POST', credentials: 'include' });
 
       router.push('/');
     } catch {
