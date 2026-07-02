@@ -38,9 +38,7 @@ export default function BookDetail({ params }: { params: { id: string } }) {
   useEffect(() => {
     httpService(`/book/${params.id}`)
       .then((data) => setBook(data.book))
-      .catch(() =>
-        toast({ variant: 'error', description: 'Erro ao carregar livro.' }),
-      )
+      .catch(() => toast({ variant: 'error', description: 'Erro ao carregar livro.' }))
       .finally(() => setLoading(false));
   }, [params.id]);
 
@@ -117,20 +115,14 @@ export default function BookDetail({ params }: { params: { id: string } }) {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="wishlist" id="wishlist" />
-                    <Label
-                      htmlFor="wishlist"
-                      className="flex cursor-pointer items-center gap-2"
-                    >
+                    <Label htmlFor="wishlist" className="flex cursor-pointer items-center gap-2">
                       <BookMarked className="h-4 w-4" />
                       Lista de desejo
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="reading" id="reading" />
-                    <Label
-                      htmlFor="reading"
-                      className="flex cursor-pointer items-center gap-2"
-                    >
+                    <Label htmlFor="reading" className="flex cursor-pointer items-center gap-2">
                       <BookOpen className="h-4 w-4" />
                       Lendo
                     </Label>
@@ -162,7 +154,7 @@ export default function BookDetail({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        <div className="md:col-span-2 space-y-4">
+        <div className="space-y-4 md:col-span-2">
           <div>
             <p className="text-sm text-muted-foreground">Autor</p>
             <p className="font-medium">{book.author}</p>
