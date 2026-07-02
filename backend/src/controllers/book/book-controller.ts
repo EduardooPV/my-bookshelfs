@@ -44,11 +44,13 @@ const changeStatusBookController = async (
     const userId = req.userId;
     const { status } = req.body;
 
-    if (userId) {
-      const book = await changeStatusBookService(bookId, userId, status);
-
-      res.status(201).json(book);
+    if (!userId) {
+      res.status(401).json({ error: 'Usuário não autenticado' });
+      return;
     }
+
+    const book = await changeStatusBookService(bookId, userId, status);
+    res.status(201).json(book);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
@@ -62,11 +64,13 @@ const deleteBookController = async (
     const { bookId } = req.params;
     const userId = req.userId;
 
-    if (userId) {
-      await deleteBookService(bookId, userId);
-
-      res.status(201).json({ success: 'Livro excluido com sucesso' });
+    if (!userId) {
+      res.status(401).json({ error: 'Usuário não autenticado' });
+      return;
     }
+
+    await deleteBookService(bookId, userId);
+    res.status(200).json({ success: 'Livro excluído com sucesso' });
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }

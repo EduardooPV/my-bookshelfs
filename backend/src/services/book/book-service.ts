@@ -12,21 +12,15 @@ const getBookService = async (bookId: string): Promise<IBook> => {
 
   const workData = await workResponse.json();
 
-  const editionsResponse = await fetch(
-    `${baseUrl}/works/${bookId}/editions.json?limit=1`,
-  );
-
-  const editionsData = await editionsResponse.json();
-  const firstEdition = editionsData.entries[0];
+  const authorKey = workData.authors?.[0]?.author?.key;
+  const author = authorKey ? await getAuthorName(authorKey) : 'Autor desconhecido';
 
   const book = {
     key: workData.key,
     title: workData.title,
-    author: workData.authors?.[0]?.author?.key
-      ? await getAuthorName(workData.authors[0].author.key)
-      : 'Autor desconhecido',
-    cover: firstEdition?.covers?.[0]
-      ? `https://covers.openlibrary.org/b/id/${firstEdition.covers[0]}-L.jpg`
+    author,
+    cover: workData.covers?.[0]
+      ? `https://covers.openlibrary.org/b/id/${workData.covers[0]}-L.jpg`
       : null,
     description:
       typeof workData.description === 'object'
@@ -50,7 +44,7 @@ const getAllBooksService = async (
   const fields = ['key', 'title', 'author_name', 'cover_i'].join(',');
 
   const response = await fetch(
-    `${baseUrl}?title=${encodeURIComponent(searchQuery)}&type=/type/edition&offset=${offset}&limit=${limit}&fields=${fields}`,
+    `${baseUrl}?title=${encodeURIComponent(searchQuery)}&offset=${offset}&limit=${limit}&fields=${fields}`,
   );
 
   if (!response.ok) {

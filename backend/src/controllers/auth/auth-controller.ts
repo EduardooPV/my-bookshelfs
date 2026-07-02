@@ -5,15 +5,16 @@ import {
   signOut,
   forgotPassword,
   resetPassword,
+  validateAndReturnToken,
 } from '../../services/auth';
 
 const signUpController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const user = await signUp(email, password);
+    const { user, emailConfirmationPending } = await signUp(email, password);
 
-    res.status(201).json({ user });
+    res.status(201).json({ user, emailConfirmationPending });
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }
@@ -40,7 +41,7 @@ const signInController = async (req: Request, res: Response) => {
   }
 };
 
-const signOutController = async (req: Request, res: Response) => {
+const signOutController = async (_req: Request, res: Response) => {
   try {
     const out = await signOut();
 
@@ -81,10 +82,30 @@ const resetPasswordController = async (req: Request, res: Response) => {
   }
 };
 
+const setCookieController = async (req: Request, res: Response) => {
+  const { access_token } = req.body;
+
+  try {
+    const token = await validateAndReturnToken(access_token);
+
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+    });
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(401).json({ error: (error as Error).message });
+  }
+};
+
 export {
   signUpController,
   signInController,
   signOutController,
   forgotPasswordController,
   resetPasswordController,
+  setCookieController,
 };
