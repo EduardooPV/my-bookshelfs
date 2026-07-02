@@ -13,7 +13,9 @@ const getBookService = async (bookId: string): Promise<IBook> => {
   const workData = await workResponse.json();
 
   const authorKey = workData.authors?.[0]?.author?.key;
-  const author = authorKey ? await getAuthorName(authorKey) : 'Autor desconhecido';
+  const author = authorKey
+    ? await getAuthorName(authorKey)
+    : 'Autor desconhecido';
 
   const book = {
     key: workData.key,

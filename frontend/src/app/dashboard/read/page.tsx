@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BookOpen, BookText, LoaderCircleIcon, Trash } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useBooksByStatus } from '@/hooks/use-books-by-status';
 import {
   DropdownMenu,

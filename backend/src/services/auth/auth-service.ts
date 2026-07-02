@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const signUp = async (email: string, password: string) => {
-  const frontendUrl = process.env.FRONTEND_URL ?? 'https://my-bookshelfs-frontend.vercel.app';
+  const frontendUrl =
+    process.env.FRONTEND_URL ?? 'https://my-bookshelfs-frontend.vercel.app';
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -51,7 +52,8 @@ const signOut = async () => {
 };
 
 const forgotPassword = async (email: string) => {
-  const frontendUrl = process.env.FRONTEND_URL ?? 'https://my-bookshelfs-frontend.vercel.app';
+  const frontendUrl =
+    process.env.FRONTEND_URL ?? 'https://my-bookshelfs-frontend.vercel.app';
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${frontendUrl}/auth/reset-password`,
   });
@@ -88,4 +90,11 @@ const validateAndReturnToken = async (access_token: string) => {
   return access_token;
 };
 
-export { signUp, signIn, signOut, forgotPassword, resetPassword, validateAndReturnToken };
+export {
+  signUp,
+  signIn,
+  signOut,
+  forgotPassword,
+  resetPassword,
+  validateAndReturnToken,
+};

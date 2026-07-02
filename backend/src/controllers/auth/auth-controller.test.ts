@@ -31,13 +31,19 @@ jest.mock('../../services/auth', () => ({
 describe('Auth Controller', () => {
   describe('signUpController', () => {
     it('should return the created user with status 201', async () => {
-      (signUp as jest.Mock).mockResolvedValue(mockUser);
+      (signUp as jest.Mock).mockResolvedValue({
+        user: mockUser,
+        emailConfirmationPending: false,
+      });
 
       await signUpController(mockRequest, mockResponse);
 
       expect(signUp).toHaveBeenCalledWith('test@example.com', 'password123');
       expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith({ user: mockUser });
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        user: mockUser,
+        emailConfirmationPending: false,
+      });
     });
 
     it('should return error with status 400 if service failed', async () => {

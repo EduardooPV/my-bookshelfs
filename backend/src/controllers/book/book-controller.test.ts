@@ -114,9 +114,9 @@ describe('Book Controller', () => {
       await deleteBookController(mockRequest, mockResponse);
 
       expect(deleteBookService).toHaveBeenCalledWith('1', 'user123');
-      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        success: 'Livro excluido com sucesso',
+        success: 'Livro excluído com sucesso',
       });
     });
 

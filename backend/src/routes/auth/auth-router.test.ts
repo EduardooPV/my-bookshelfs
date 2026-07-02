@@ -25,6 +25,9 @@ jest.mock('../../controllers/auth', () => ({
   resetPasswordController: jest.fn((req, res) =>
     res.status(200).json({ message: 'Reset Password Success' }),
   ),
+  setCookieController: jest.fn((req, res) =>
+    res.status(200).json({ message: 'Set Cookie Success' }),
+  ),
 }));
 
 const app = express();
