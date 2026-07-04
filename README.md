@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./assets/icon-128x128.png" alt="My Bookshelfs" width="96" />
+  <img src="./assets/icon-128x128.png" alt="My Bookshelves" width="96" />
 </p>
 
-<h1 align="center">My Bookshelfs</h1>
+<h1 align="center">My Bookshelves</h1>
 
 <p align="center">
   Organize sua biblioteca pessoal — acompanhe livros que leu, está lendo e quer ler.
@@ -20,7 +20,7 @@
 
 ## Sobre o projeto
 
-**My Bookshelfs** é uma aplicação full-stack para gestão de leituras pessoais. A ideia central é simples: você pesquisa livros pelo título, adiciona à sua estante e marca o status — _lista de desejos_, _lendo_ ou _concluído_. O acervo é alimentado pela [Open Library API](https://openlibrary.org/developers/api), garantindo milhões de títulos disponíveis sem precisar cadastrar nada manualmente.
+**My Bookshelves** é uma aplicação full-stack para gestão de leituras pessoais. A ideia central é simples: você pesquisa livros pelo título, adiciona à sua estante e marca o status — _lista de desejos_, _lendo_ ou _concluído_. O acervo é alimentado pela [Open Library API](https://openlibrary.org/developers/api), garantindo milhões de títulos disponíveis sem precisar cadastrar nada manualmente.
 
 ### Funcionalidades
 
@@ -58,8 +58,8 @@
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/EduardooPV/my-bookshelfs.git
-cd my-bookshelfs
+git clone https://github.com/EduardooPV/my-bookshelves.git
+cd my-bookshelves
 ```
 
 ### 2. Configure as variáveis de ambiente
@@ -114,7 +114,7 @@ cd frontend && npm run test:unit
 ## Estrutura do repositório
 
 ```
-my-bookshelfs/
+my-bookshelves/
 ├── backend/    API REST (Express + TypeScript + Supabase)
 ├── frontend/   Web app (Next.js + React + Tailwind)
 ├── assets/     Ícones do projeto
